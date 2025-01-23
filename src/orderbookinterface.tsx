@@ -1,7 +1,14 @@
+/**
+ * OrderbookInterface.tsx
+ * Created: 2025-01-23 00:46:06
+ * Author: jake1318
+ * Description: DEX Orderbook Interface for SUI/USDC trading pair
+ */
+
 import { useState, useEffect } from "react";
 import {
   useCurrentAccount,
-  useSignAndExecuteTransactionBlock,
+  useSignAndExecuteTransaction,
   useSuiClient,
 } from "@mysten/dapp-kit";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
@@ -95,8 +102,7 @@ const calculateMarketStats = (trades: Trade[], lastPrice: number | null) => {
 export function OrderbookInterface() {
   const currentAccount = useCurrentAccount();
   const suiClient = useSuiClient();
-  const { mutate: signAndExecuteTransactionBlock } =
-    useSignAndExecuteTransactionBlock();
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
   // Market states
   const [asks, setAsks] = useState<OrderbookLevel[]>([]);
@@ -163,7 +169,6 @@ export function OrderbookInterface() {
           const currentPrice = (askOrders[0].price + bidOrders[0].price) / 2;
           setLastPrice(currentPrice);
 
-          // Update trades with a new trade if price changed
           if (currentPrice !== lastPrice) {
             const newTrade: Trade = {
               id: Date.now().toString(),
@@ -201,10 +206,8 @@ export function OrderbookInterface() {
           setUserOrders(userOrdersData);
         }
 
-        // Update market stats
         setMarketStats(calculateMarketStats(trades, lastPrice));
 
-        // Update chart data
         const newCandle: ChartData = {
           time: new Date().toISOString().split("T")[0],
           open: trades[0]?.price || lastPrice || 0,
@@ -284,8 +287,8 @@ export function OrderbookInterface() {
         }
       }
 
-      await signAndExecuteTransactionBlock({
-        transactionBlock: txb as any,
+      await signAndExecuteTransaction({
+        transaction: txb,
       });
 
       setNotification(
@@ -318,8 +321,8 @@ export function OrderbookInterface() {
         arguments: [txb.object(DEEPBOOK.POOLS.USDC_SUI), txb.object(orderId)],
       });
 
-      await signAndExecuteTransactionBlock({
-        transactionBlock: txb as any,
+      await signAndExecuteTransaction({
+        transaction: txb,
       });
 
       setNotification(

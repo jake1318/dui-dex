@@ -1,7 +1,14 @@
+/**
+ * SwapInterface.tsx
+ * Created: 2025-01-23 00:43:14
+ * Author: jake1318
+ * Description: DEX Swap Interface for SUI/USDC trading
+ */
+
 import { useState, useEffect } from "react";
 import {
   useCurrentAccount,
-  useSignAndExecuteTransactionBlock,
+  useSignAndExecuteTransaction,
   useSuiClient,
   ConnectButton,
 } from "@mysten/dapp-kit";
@@ -56,8 +63,7 @@ const TOKENS: Token[] = [
 export function SwapInterface() {
   const currentAccount = useCurrentAccount();
   const suiClient = useSuiClient();
-  const { mutate: signAndExecuteTransactionBlock } =
-    useSignAndExecuteTransactionBlock();
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
   // Token and amount states
   const [fromToken, setFromToken] = useState<Token>(TOKENS[0]);
@@ -293,13 +299,11 @@ export function SwapInterface() {
         });
       }
 
-      await signAndExecuteTransactionBlock({
-        transactionBlock: txb as any,
+      await signAndExecuteTransaction({
+        transaction: txb,
       });
 
-      setNotification(
-        createNotification("Swap executed successfully", "success")
-      );
+      setNotification(createNotification("Swap executed successfully", "success"));
       setAmount("");
       updateEstimatedOutput("0");
     } catch (error) {
@@ -314,6 +318,9 @@ export function SwapInterface() {
       setIsLoading(false);
     }
   };
+
+  // ... rest of your component remains the same ...
+}
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 max-w-md mx-auto mt-8">
