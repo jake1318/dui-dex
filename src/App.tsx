@@ -1,10 +1,16 @@
+/**
+ * @file App.tsx
+ * Last updated: 2025-01-23 04:36:02 UTC
+ * Author: jake1318
+ */
+
 import { ConnectButton, SuiClientProvider } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
 import { WalletProvider } from "@mysten/dapp-kit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SwapInterface } from "./SwapInterface";
-import { OrderbookInterface } from "./orderbookinterface"; // Add this import
+import { OrderBookInterface } from "./orderbookinterface";
 import { Navigation } from "./navigation";
 
 const queryClient = new QueryClient();
@@ -29,8 +35,7 @@ function App() {
                 </div>
                 <Routes>
                   <Route path="/" element={<SwapInterface />} />
-                  <Route path="/trade" element={<OrderbookInterface />} />{" "}
-                  {/* Add this route */}
+                  <Route path="/trade" element={<OrderBookInterface />} />
                 </Routes>
               </div>
             </div>

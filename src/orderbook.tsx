@@ -1,67 +1,85 @@
-import type { OrderbookLevel } from './orderbooks';
+// src/components/OrderBook.tsx
+import { useState } from "react";
+import { OrderBookEntry } from "./types";
+import { formatPrice, formatAmount } from "./utils";
 
 interface OrderBookProps {
-  asks: OrderbookLevel[];
-  bids: OrderbookLevel[];
-  lastPrice: number | null;
-  onPriceClick: (price: number, side: 'buy' | 'sell') => void;
-  isConnected: boolean;
+  bids: OrderBookEntry[];
+  asks: OrderBookEntry[];
+  onSelect: (price: number) => void;
+  maxRows?: number;
 }
 
-export function OrderBook({ asks, bids, lastPrice, onPriceClick, isConnected }: OrderBookProps) {
+export function OrderBook({
+  bids,
+  asks,
+  onSelect,
+  maxRows = 15,
+}: OrderBookProps) {
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+
+  const handlePriceSelect = (price: number) => {
+    setSelectedPrice(price);
+    onSelect(price);
+  };
+
   return (
-    <div className="col-span-3 bg-gray-800 rounded-lg p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">Order Book</h2>
-        <div className="text-sm text-gray-400">
-          {lastPrice ? `Last Price: $${lastPrice.toFixed(2)}` : '-'}
-        </div>
+    <div className="w-full">
+      <h3 className="text-lg font-bold mb-4">Order Book</h3>
+
+      <div className="grid grid-cols-3 text-sm font-semibold mb-2">
+        <div>Price (USDC)</div>
+        <div className="text-right">Amount (SUI)</div>
+        <div className="text-right">Total</div>
       </div>
-      
-      <div className="mb-4">
-        <div className="grid grid-cols-3 text-sm text-gray-400 mb-2">
-          <div>Price</div>
-          <div className="text-right">Size</div>
-          <div className="text-right">Total</div>
-        </div>
-        
-        {/* Asks */}
-        <div className="space-y-1">
-          {asks.map((level, i) => (
-            <div 
-              key={i} 
-              className="grid grid-cols-3 text-sm text-red-400 hover:bg-gray-700 cursor-pointer"
-              onClick={() => isConnected && onPriceClick(level.price, 'buy')}
-            >
-              <div>{level.price.toFixed(2)}</div>
-              <div className="text-right">{level.size.toFixed(4)}</div>
-              <div className="text-right">{level.total.toFixed(4)}</div>
-            </div>
-          ))}
-        </div>
 
-        {/* Spread */}
-        <div className="my-2 text-center text-sm text-gray-400">
-          Spread: {lastPrice && asks[0] && bids[0] 
-            ? `$${(asks[0].price - bids[0].price).toFixed(2)} (${((asks[0].price - bids[0].price) / lastPrice * 100).toFixed(2)}%)`
-            : '-'
-          }
-        </div>
+      {/* Asks */}
+      <div className="mb-2">
+        {asks.slice(0, maxRows).map((ask, i) => (
+          <div
+            key={`ask-${i}`}
+            className={`grid grid-cols-3 text-sm cursor-pointer hover:bg-gray-700
+              ${selectedPrice === ask.price ? "bg-gray-700" : ""}`}
+            onClick={() => handlePriceSelect(ask.price)}
+          >
+            <div className="text-red-500">{formatPrice(ask.price)}</div>
+            <div className="text-right">{formatAmount(ask.quantity)}</div>
+            <div className="text-right">{formatAmount(ask.total)}</div>
+            <div
+              className="absolute right-0 h-full bg-red-500/10"
+              style={{ width: `${ask.depth}%` }}
+            />
+          </div>
+        ))}
+      </div>
 
-        {/* Bids */}
-        <div className="space-y-1">
-          {bids.map((level, i) => (
-            <div 
-              key={i} 
-              className="grid grid-cols-3 text-sm text-green-400 hover:bg-gray-700 cursor-pointer"
-              onClick={() => isConnected && onPriceClick(level.price, 'sell')}
-            >
-              <div>{level.price.toFixed(2)}</div>
-              <div className="text-right">{level.size.toFixed(4)}</div>
-              <div className="text-right">{level.total.toFixed(4)}</div>
-            </div>
-          ))}
+      {/* Spread */}
+      {bids.length > 0 && asks.length > 0 && (
+        <div className="text-center text-sm text-gray-500 my-2">
+          Spread: {formatPrice(asks[0].price - bids[0].price)} (
+          {(((asks[0].price - bids[0].price) / bids[0].price) * 100).toFixed(2)}
+          %)
         </div>
+      )}
+
+      {/* Bids */}
+      <div>
+        {bids.slice(0, maxRows).map((bid, i) => (
+          <div
+            key={`bid-${i}`}
+            className={`grid grid-cols-3 text-sm cursor-pointer hover:bg-gray-700
+              ${selectedPrice === bid.price ? "bg-gray-700" : ""}`}
+            onClick={() => handlePriceSelect(bid.price)}
+          >
+            <div className="text-green-500">{formatPrice(bid.price)}</div>
+            <div className="text-right">{formatAmount(bid.quantity)}</div>
+            <div className="text-right">{formatAmount(bid.total)}</div>
+            <div
+              className="absolute right-0 h-full bg-green-500/10"
+              style={{ width: `${bid.depth}%` }}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

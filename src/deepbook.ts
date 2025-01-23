@@ -1,18 +1,16 @@
 /**
  * @file deepbook.ts
- * Created: 2025-01-22 05:27:44 UTC
+ * Last updated: 2025-01-23 04:10:46 UTC
  * Author: jake1318
  */
 
 import { type SuiClient } from "@mysten/sui.js/client";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { ERRORS, type PriceImpact, CONSTANTS, SLIPPAGE } from "./utils";
 import {
-  calculatePriceImpact,
-  ERRORS,
-  type PriceImpact,
-  CONSTANTS,
-  SLIPPAGE,
-} from "./utils";
+  type OrderBookEntry as BaseOrderBookEntry,
+  type PoolData as BasePoolData,
+} from "./types";
 
 export const TOKEN_TYPES = {
   SUI: "0x2::sui::SUI",
@@ -30,14 +28,13 @@ export const DEEPBOOK = {
   },
 } as const;
 
-export interface PoolData {
-  baseToken: string;
-  quoteToken: string;
-  tickSize: bigint;
-  lotSize: bigint;
-  baseBalance: bigint;
-  quoteBalance: bigint;
+// Extend the base OrderBookEntry type with DeepBook specific fields
+export interface OrderBookEntry extends BaseOrderBookEntry {
+  size: number;
 }
+
+// Use the base PoolData type
+export type PoolData = BasePoolData;
 
 export interface PoolState {
   isActive: boolean;
@@ -149,17 +146,61 @@ export async function validateSwap(
     slippageTolerance
   );
 
-  const priceImpact = calculatePriceImpact(
+  const impact = calculateLocalPriceImpact(
     inputAmount,
     estimatedOutput,
-    poolData.quoteBalance / poolData.baseBalance
+    poolData.quoteBalance,
+    poolData.baseBalance
   );
 
-  if (priceImpact.severity === "VERY_HIGH") {
-    return { isValid: false, error: ERRORS.HIGH_PRICE_IMPACT, priceImpact };
+  if (impact.severity === "VERY_HIGH") {
+    return {
+      isValid: false,
+      error: ERRORS.HIGH_PRICE_IMPACT,
+      priceImpact: impact,
+    };
   }
 
-  return { isValid: true, priceImpact };
+  return { isValid: true, priceImpact: impact };
+}
+
+function calculateLocalPriceImpact(
+  inputAmount: bigint,
+  outputAmount: bigint,
+  quoteBalance: bigint,
+  baseBalance: bigint
+): PriceImpact {
+  const expectedPrice = Number(quoteBalance) / Number(baseBalance);
+  const expectedOutput = Number(inputAmount) * expectedPrice;
+  const actualOutput = Number(outputAmount);
+  const impact =
+    Math.abs((expectedOutput - actualOutput) / expectedOutput) * 100;
+
+  if (impact <= CONSTANTS.PRICE_IMPACT_THRESHOLDS.LOW) {
+    return {
+      percentage: impact,
+      severity: "LOW",
+      color: "text-green-500",
+    };
+  } else if (impact <= CONSTANTS.PRICE_IMPACT_THRESHOLDS.MEDIUM) {
+    return {
+      percentage: impact,
+      severity: "MEDIUM",
+      color: "text-yellow-500",
+    };
+  } else if (impact <= CONSTANTS.PRICE_IMPACT_THRESHOLDS.HIGH) {
+    return {
+      percentage: impact,
+      severity: "HIGH",
+      color: "text-orange-500",
+    };
+  } else {
+    return {
+      percentage: impact,
+      severity: "VERY_HIGH",
+      color: "text-red-500",
+    };
+  }
 }
 
 export async function getDeepBookPoolIds(client: SuiClient): Promise<void> {
@@ -225,6 +266,24 @@ export async function getPoolData(
       lotSize: BigInt(content.lot_size),
       baseBalance: BigInt(content.base_custodian.total_supply),
       quoteBalance: BigInt(content.quote_custodian.total_supply),
+      baseReserve: BigInt(content.base_custodian.total_supply),
+      quoteReserve: BigInt(content.quote_custodian.total_supply),
+      bids:
+        content.bids?.map((bid: any) => ({
+          price: Number(bid.price),
+          size: Number(bid.size),
+          quantity: Number(bid.size),
+          total: Number(bid.price) * Number(bid.size),
+          depth: 0,
+        })) || [],
+      asks:
+        content.asks?.map((ask: any) => ({
+          price: Number(ask.price),
+          size: Number(ask.size),
+          quantity: Number(ask.size),
+          total: Number(ask.price) * Number(ask.size),
+          depth: 0,
+        })) || [],
     };
   } catch (error) {
     console.error("Error fetching pool data:", error);
@@ -240,8 +299,8 @@ export function calculateOutputWithSlippage(
   estimatedOutput: bigint;
   minimumOutput: bigint;
 } {
-  const price = poolData.quoteBalance / poolData.baseBalance;
-  const estimatedOutput = (inputAmount * price) / BigInt(1e9);
+  const price = Number(poolData.quoteBalance) / Number(poolData.baseBalance);
+  const estimatedOutput = BigInt(Math.floor(Number(inputAmount) * price));
   const minimumOutput =
     estimatedOutput -
     (estimatedOutput * BigInt(Math.floor(slippageTolerance * 100))) /
