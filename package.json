@@ -13,9 +13,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mysten/bcs": "^1.2.1",
     "@mysten/dapp-kit": "^0.11.0",
-    "@mysten/bcs": "^0.6.0",
     "@mysten/sui": "^1.20.0",
+    "@mysten/sui.js": "^0.54.1",
     "@tanstack/react-query": "^5.17.19",
     "date-fns": "^4.1.0",
     "lightweight-charts": "^4.2.2",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
+    "@types/node": "^22.10.10",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
@@ -37,6 +39,6 @@
     "vite": "^5.0.8"
   },
   "resolutions": {
-    "@mysten/bcs": "^0.11.1"
+    "@mysten/bcs": "^1.2.1"
   }
 }
