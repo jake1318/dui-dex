@@ -2,8 +2,8 @@
 // Last updated: 2024-01-23 03:50:22 UTC
 // Author: jake1318
 
-import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { SuiClient } from "@mysten/sui.js/client";
+import { Transaction } from "@mysten/sui/transactions"; // Correct import for Transaction
+import { SuiClient } from "@mysten/sui/client";
 
 export interface PriceImpact {
   percentage: number;
@@ -12,10 +12,8 @@ export interface PriceImpact {
 }
 
 // Transaction Utilities
-export const prepareTransactionBlock = (
-  txb: TransactionBlock
-): TransactionBlock => {
-  return txb as TransactionBlock;
+export const prepareTransactionBlock = (txb: Transaction): Transaction => {
+  return txb as Transaction;
 };
 
 export const castToSuiClient = (client: unknown): SuiClient => {
@@ -63,8 +61,6 @@ export const ERRORS = {
   WALLET_NOT_CONNECTED: "Please connect your wallet",
   INVALID_TRANSACTION: "Invalid transaction configuration",
 } as const;
-
-// ... [Previous price impact calculation code remains the same]
 
 // Enhanced formatting functions with type safety
 export const formatBalance = (balance: bigint, decimals: number): string => {
@@ -201,6 +197,7 @@ export const validateTransactionInput = (
 
   return { isValid: true };
 };
+
 // src/utils.ts
 // Last updated: 2024-01-23 04:00:48 UTC
 // Author: jake1318

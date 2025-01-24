@@ -4,8 +4,8 @@
  * Author: jake1318
  */
 
-import { type SuiClient } from "@mysten/sui.js/client";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { type SuiClient } from "@mysten/sui/client";
+import { Transaction } from "@mysten/sui/transactions"; // Correct import for Transaction
 import { ERRORS, type PriceImpact, CONSTANTS, SLIPPAGE } from "./utils";
 import {
   type OrderBookEntry as BaseOrderBookEntry,
@@ -205,7 +205,7 @@ function calculateLocalPriceImpact(
 
 export async function getDeepBookPoolIds(client: SuiClient): Promise<void> {
   try {
-    const txb = new TransactionBlock();
+    const txb = new Transaction();
 
     txb.moveCall({
       target: `${DEEPBOOK.PACKAGE_ID}::pool::get_pool_id_by_asset`,

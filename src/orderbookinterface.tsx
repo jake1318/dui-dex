@@ -9,8 +9,9 @@ import {
   ConnectButton,
   useSuiClient,
 } from "@mysten/dapp-kit";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { type SuiClient } from "@mysten/sui.js/client";
+import { Transaction } from "@mysten/sui/transactions"; // Correct import for Transaction
+import { type SuiClient } from "@mysten/sui/client";
+import { bcs } from "@mysten/bcs"; // Correct import for BCS
 import {
   DEEPBOOK,
   getPoolData,
@@ -219,20 +220,26 @@ export function OrderBookInterface() {
 
     setIsLoading(true);
     try {
-      const txb = new TransactionBlock();
+      const txb = new Transaction();
       const amountInBaseUnits = parseInputAmount(amount, TOKENS[0].decimals);
 
       if (!amountInBaseUnits) {
         throw new Error(ERRORS.INVALID_AMOUNT);
       }
 
+      const amountInBaseUnitsSerialized = bcs.ser("u64", amountInBaseUnits);
+
       if (orderType === "limit") {
-        const [coin] = txb.splitCoins(txb.gas, [txb.pure(amountInBaseUnits)]);
+        const [coin] = txb.splitCoins(txb.gas, [
+          txb.pure(amountInBaseUnitsSerialized),
+        ]);
         const priceInBaseUnits = parseInputAmount(price, TOKENS[1].decimals);
 
         if (!priceInBaseUnits) {
           throw new Error(ERRORS.INVALID_PRICE);
         }
+
+        const priceInBaseUnitsSerialized = bcs.ser("u64", priceInBaseUnits);
 
         txb.moveCall({
           target: `${DEEPBOOK.PACKAGE_ID}::clob::place_limit_order`,
@@ -243,13 +250,15 @@ export function OrderBookInterface() {
           arguments: [
             txb.object(TOKENS[1].poolId!),
             coin,
-            txb.pure(priceInBaseUnits),
-            txb.pure(amountInBaseUnits),
+            txb.pure(priceInBaseUnitsSerialized),
+            txb.pure(amountInBaseUnitsSerialized),
             txb.object("0x6"),
           ],
         });
       } else {
-        const [coin] = txb.splitCoins(txb.gas, [txb.pure(amountInBaseUnits)]);
+        const [coin] = txb.splitCoins(txb.gas, [
+          txb.pure(amountInBaseUnitsSerialized),
+        ]);
 
         txb.moveCall({
           target: `${DEEPBOOK.PACKAGE_ID}::clob::place_market_order`,
@@ -260,7 +269,7 @@ export function OrderBookInterface() {
           arguments: [
             txb.object(TOKENS[1].poolId!),
             coin,
-            txb.pure(amountInBaseUnits),
+            txb.pure(amountInBaseUnitsSerialized),
             txb.object("0x6"),
           ],
         });
