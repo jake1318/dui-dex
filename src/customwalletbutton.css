@@ -1,0 +1,52 @@
+/**
+ * @file src/components/CustomWalletButton.css
+ * Last updated: 2025-01-24 05:05:14
+ * Author: jake1318
+ */
+
+.wallet-container {
+  display: flex;
+  align-items: center;
+}
+
+.wallet-connected {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.wallet-connect,
+.wallet-address,
+.wallet-disconnect {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wallet-connect {
+  background: #00a3ff;
+  color: white;
+  border: none;
+}
+
+.wallet-connect:hover {
+  background: #0087d5;
+}
+
+.wallet-address {
+  background: rgba(0, 163, 255, 0.1);
+  color: #00a3ff;
+  border: 1px solid #00a3ff;
+}
+
+.wallet-disconnect {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  border: 1px solid #ff3b30;
+}
+
+.wallet-disconnect:hover {
+  background: rgba(255, 59, 48, 0.2);
+}

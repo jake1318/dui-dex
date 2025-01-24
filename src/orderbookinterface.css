@@ -1,0 +1,301 @@
+/* Updated src/styles/Dex.css */
+
+.dex-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e1e1e, #000000);
+  padding: 2rem;
+  color: #00a3ff;
+  font-family: "Orbitron", sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Grid Layout */
+.dex-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+/* Card Styling with Glow */
+.dex-card {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid #00a3ff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.dex-card:hover {
+  box-shadow: 0 0 30px rgba(0, 230, 255, 0.8);
+  border-color: #00ffff;
+}
+
+/* Chart Section */
+.chart-container {
+  grid-column: span 8;
+}
+
+/* Trading Form */
+.trading-form {
+  grid-column: span 4;
+}
+
+/* Order Type Buttons */
+.order-type-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 163, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: #00a3ff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(0, 163, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 163, 255, 0.2);
+}
+
+.order-button.active {
+  background: rgba(0, 163, 255, 0.1);
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  text-shadow: 0 0 12px #00ffff;
+}
+
+.order-button:hover:not(.active) {
+  background: rgba(0, 163, 255, 0.05);
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.6);
+}
+
+/* Buy/Sell Buttons */
+.trade-button {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(0, 163, 255, 0.5);
+}
+
+.trade-button.buy {
+  background: rgba(0, 200, 83, 0.1);
+  border: 1px solid rgba(0, 200, 83, 0.2);
+  color: #00c853;
+  box-shadow: 0 0 15px rgba(0, 200, 83, 0.3);
+}
+
+.trade-button.buy.active {
+  background: #00c853;
+  color: white;
+  box-shadow: 0 0 25px rgba(0, 200, 83, 0.6);
+}
+
+.trade-button.sell {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+.trade-button.sell.active {
+  background: #ff4444;
+  color: white;
+  box-shadow: 0 0 25px rgba(255, 68, 68, 0.6);
+}
+
+/* Form Controls */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  color: #87cefa;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-shadow: 0 0 8px rgba(135, 206, 250, 0.5);
+}
+
+.form-input {
+  width: 100%;
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid #00a3ff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #e0e0e0;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(0, 230, 255, 0.4);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Connect Button Override */
+.connect-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid #00a3ff;
+  border-radius: 8px;
+  color: #00a3ff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 230, 255, 0.4);
+  text-shadow: 0 0 8px rgba(0, 163, 255, 0.5);
+}
+
+.connect-button:hover {
+  background: rgba(0, 163, 255, 0.1);
+  border-color: #00ffff;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+}
+
+/* OrderBook and Recent Trades */
+.orderbook-container,
+.trades-container {
+  grid-column: span 6;
+}
+
+.table-header {
+  color: #87cefa;
+  text-shadow: 0 0 8px rgba(135, 206, 250, 0.5);
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(0, 163, 255, 0.2);
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  animation: slideIn 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.6);
+}
+
+.notification.success {
+  background: rgba(0, 200, 83, 0.9);
+  border: 1px solid #00c853;
+  box-shadow: 0 0 20px rgba(0, 200, 83, 0.6);
+}
+
+.notification.error {
+  background: rgba(255, 68, 68, 0.9);
+  border: 1px solid #ff4444;
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+}
+
+/* Loading State */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 163, 255, 0.1);
+  border-top-color: #00ffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1536px) {
+  .chart-container {
+    grid-column: span 7;
+  }
+
+  .trading-form {
+    grid-column: span 5;
+  }
+}
+
+@media (max-width: 1280px) {
+  .dex-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .chart-container,
+  .trading-form {
+    grid-column: span 8;
+  }
+
+  .orderbook-container,
+  .trades-container {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 768px) {
+  .dex-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .chart-container,
+  .trading-form,
+  .orderbook-container,
+  .trades-container {
+    grid-column: span 4;
+  }
+
+  .dex-container {
+    padding: 1rem;
+  }
+}

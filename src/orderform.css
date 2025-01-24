@@ -1,0 +1,100 @@
+/* OrderForm Styles */
+
+/* Form Container */
+form {
+  padding: 1rem;
+  background-color: #1c1f26;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover:not([disabled]) {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.bg-blue-500 {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.bg-gray-700 {
+  background-color: #3a3a3a;
+  color: #cccccc;
+}
+
+.bg-green-500 {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+
+.bg-red-500 {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
+
+.hover\:bg-green-600:hover {
+  background-color: #27ae60;
+}
+
+.hover\:bg-red-600:hover {
+  background-color: #c0392b;
+}
+
+/* Labels */
+label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: #cccccc;
+}
+
+/* Input Fields */
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2a2d35;
+  color: #e6e6e6;
+  font-size: 1rem;
+}
+
+input[type="number"]::placeholder {
+  color: #888;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: #00a3ff;
+  box-shadow: 0 0 5px rgba(0, 163, 255, 0.8);
+}
+
+/* Margins and Gaps */
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.flex {
+  display: flex;
+  gap: 0.5rem;
+}

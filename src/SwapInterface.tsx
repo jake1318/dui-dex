@@ -1,62 +1,72 @@
 // src/SwapInterface.tsx
-// Last updated: 2025-01-23 21:15:41 UTC
+// Last updated: 2025-01-24
 // Author: jake1318
 
 import React from "react";
+import "./swapinterface.css";
+
+const Footer: React.FC = () => (
+  <footer className="footer">
+    <p>&copy; 2025 Sui Mind. All rights reserved.</p>
+  </footer>
+);
 
 export const SwapInterface: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Swap Tokens</h1>
+    <>
+      <div className="swap-container">
+        <div className="swap-card">
+          <h1 className="swap-title">Swap Tokens</h1>
 
-        {/* Swap Interface */}
-        <div className="bg-gray-800 rounded-lg p-4">
-          <div className="space-y-4">
-            {/* From Token */}
-            <div className="bg-gray-700 rounded-lg p-4">
-              <div className="flex justify-between mb-2">
-                <span className="text-gray-400">From</span>
-                <span className="text-gray-400">Balance: 0.00</span>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="number"
-                  className="bg-transparent text-2xl w-full outline-none"
-                  placeholder="0.0"
-                />
-                <button className="ml-2 bg-gray-600 px-3 py-1 rounded">
-                  Select Token
-                </button>
-              </div>
+          <div className="token-input-container">
+            <div className="token-input-header">
+              <span className="token-label">From</span>
+              <span className="token-balance">Balance: 0.00</span>
             </div>
-
-            {/* Swap Button */}
-            <button className="bg-blue-500 hover:bg-blue-600 w-full py-3 rounded-lg font-semibold">
-              Swap
-            </button>
-
-            {/* To Token */}
-            <div className="bg-gray-700 rounded-lg p-4">
-              <div className="flex justify-between mb-2">
-                <span className="text-gray-400">To</span>
-                <span className="text-gray-400">Balance: 0.00</span>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="number"
-                  className="bg-transparent text-2xl w-full outline-none"
-                  placeholder="0.0"
-                  readOnly
-                />
-                <button className="ml-2 bg-gray-600 px-3 py-1 rounded">
-                  Select Token
-                </button>
-              </div>
+            <div className="token-input-content">
+              <input type="number" className="token-input" placeholder="0.0" />
+              <button className="select-token-button">Select Token</button>
             </div>
           </div>
+
+          <div className="swap-arrow">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 3L8 13M8 13L13 8M8 13L3 8"
+                stroke="#00a3ff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div className="token-input-container">
+            <div className="token-input-header">
+              <span className="token-label">To</span>
+              <span className="token-balance">Balance: 0.00</span>
+            </div>
+            <div className="token-input-content">
+              <input
+                type="number"
+                className="token-input"
+                placeholder="0.0"
+                readOnly
+              />
+              <button className="select-token-button">Select Token</button>
+            </div>
+          </div>
+
+          <button className="swap-button">Swap</button>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };

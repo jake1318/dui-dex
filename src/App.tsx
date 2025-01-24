@@ -1,43 +1,86 @@
 /**
- * @file App.tsx
- * Last updated: 2025-01-23 04:36:02 UTC
+ * @file src/App.tsx
+ * Last updated: 2025-01-24 22:46:54
  * Author: jake1318
  */
 
-import { ConnectButton, SuiClientProvider } from "@mysten/dapp-kit";
-import { getFullnodeUrl } from "@mysten/sui/client";
-import { WalletProvider } from "@mysten/dapp-kit";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Navbar } from "./navbar";
+import { Home } from "./home"; // Import the Home component
 import { SwapInterface } from "./SwapInterface";
 import { OrderBookInterface } from "./orderbookinterface";
-import { Navigation } from "./navigation";
+import { Search } from "./search";
+import MindExchangePage from "./mindmarket";
+import { PageLayout } from "./pagelayout";
+import {
+  WalletProvider,
+  SuiClientProvider,
+  createNetworkConfig,
+} from "@mysten/dapp-kit";
+import { getFullnodeUrl } from "@mysten/sui.js/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// Create a new query client
 const queryClient = new QueryClient();
 
-const networks = {
-  mainnet: {
-    url: getFullnodeUrl("mainnet"),
-  },
-};
+// Define network configuration
+const { networkConfig } = createNetworkConfig({
+  mainnet: { url: getFullnodeUrl("mainnet") },
+  testnet: { url: getFullnodeUrl("testnet") },
+  devnet: { url: getFullnodeUrl("devnet") },
+  localnet: { url: "http://127.0.0.1:9000" },
+});
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networks} defaultNetwork="mainnet">
-        <WalletProvider>
+      <SuiClientProvider networks={networkConfig}>
+        <WalletProvider preferredWallets={["Sui Wallet"]}>
           <Router>
-            <div className="w-full min-h-screen bg-gray-900 text-white p-4">
-              <div className="container mx-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <Navigation />
-                  <ConnectButton />
-                </div>
-                <Routes>
-                  <Route path="/" element={<SwapInterface />} />
-                  <Route path="/trade" element={<OrderBookInterface />} />
-                </Routes>
-              </div>
+            <div className="min-h-screen bg-gray-900">
+              <Navbar />
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <PageLayout>
+                      <Home />
+                    </PageLayout>
+                  }
+                />
+                <Route
+                  path="/mind-swap"
+                  element={
+                    <PageLayout>
+                      <SwapInterface />
+                    </PageLayout>
+                  }
+                />
+                <Route
+                  path="/orderbook"
+                  element={
+                    <PageLayout fullWidth>
+                      <OrderBookInterface />
+                    </PageLayout>
+                  }
+                />
+                <Route
+                  path="/mind-search"
+                  element={
+                    <PageLayout>
+                      <Search />
+                    </PageLayout>
+                  }
+                />
+                <Route
+                  path="/mind-exchange"
+                  element={
+                    <PageLayout>
+                      <MindExchangePage />
+                    </PageLayout>
+                  }
+                />
+              </Routes>
             </div>
           </Router>
         </WalletProvider>

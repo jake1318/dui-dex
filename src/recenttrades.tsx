@@ -1,15 +1,22 @@
-// src/components/RecentTrades.tsx
+/**
+ * @file RecentTrades.tsx
+ * Last updated: 2025-01-24 03:00:29
+ * Author: jake1318
+ */
 
-import { useEffect, useState } from 'react';
-import { Trade } from './types';  // Updated import path
-import { formatPrice, formatAmount, formatTimestamp } from './formatter';  // Updated import path
+import { useEffect, useState } from "react";
+import { Trade } from "./types";
+import { formatPrice, formatAmount, formatTimestamp } from "./formatter";
 
 interface RecentTradesProps {
   trades: Trade[];
   maxHeight?: string;
 }
 
-export function RecentTrades({ trades, maxHeight = '400px' }: RecentTradesProps) {
+export function RecentTrades({
+  trades,
+  maxHeight = "400px",
+}: RecentTradesProps) {
   const [animatedTrades, setAnimatedTrades] = useState<Trade[]>(trades);
 
   useEffect(() => {
@@ -17,45 +24,30 @@ export function RecentTrades({ trades, maxHeight = '400px' }: RecentTradesProps)
   }, [trades]);
 
   return (
-    <div className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-bold">Recent Trades</h3>
+    <div className="recent-trades-container">
+      <div className="trades-header">
+        <div className="column-labels">
+          <div className="label">Price (USDC)</div>
+          <div className="label text-right">Amount (SUI)</div>
+          <div className="label text-right">Total (USDC)</div>
+          <div className="label text-right">Time</div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-4 text-sm font-semibold mb-2 px-2">
-        <div>Price (USDC)</div>
-        <div className="text-right">Amount (SUI)</div>
-        <div className="text-right">Total (USDC)</div>
-        <div className="text-right">Time</div>
-      </div>
-
-      <div className="overflow-y-auto" style={{ maxHeight }}>
+      <div className="trades-content" style={{ maxHeight }}>
         {animatedTrades.map((trade) => (
-          <div
-            key={trade.id}
-            className={`grid grid-cols-4 text-sm border-b border-gray-700 py-2 px-2 
-              ${trade.side === 'buy' ? 'text-green-500' : 'text-red-500'}
-              transition-all duration-300 ease-in-out transform hover:bg-gray-700`}
-          >
-            <div className="font-medium">
-              {formatPrice(trade.price)}
-            </div>
-            <div className="text-right">
-              {formatAmount(trade.quantity)}
-            </div>
-            <div className="text-right">
+          <div key={trade.id} className={`trade-row ${trade.side}`}>
+            <div className="price">{formatPrice(trade.price)}</div>
+            <div className="amount">{formatAmount(trade.quantity)}</div>
+            <div className="total">
               {formatPrice(trade.price * trade.quantity)}
             </div>
-            <div className="text-right text-gray-400">
-              {formatTimestamp(trade.timestamp)}
-            </div>
+            <div className="timestamp">{formatTimestamp(trade.timestamp)}</div>
           </div>
         ))}
 
         {animatedTrades.length === 0 && (
-          <div className="text-center py-4 text-gray-500">
-            No trades yet
-          </div>
+          <div className="no-trades">No trades yet</div>
         )}
       </div>
     </div>
@@ -64,28 +56,23 @@ export function RecentTrades({ trades, maxHeight = '400px' }: RecentTradesProps)
 
 export function RecentTradesLoading() {
   return (
-    <div className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-bold">Recent Trades</h3>
+    <div className="recent-trades-container">
+      <div className="trades-header">
+        <div className="column-labels">
+          <div className="label">Price (USDC)</div>
+          <div className="label text-right">Amount (SUI)</div>
+          <div className="label text-right">Total (USDC)</div>
+          <div className="label text-right">Time</div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-4 text-sm font-semibold mb-2 px-2">
-        <div>Price (USDC)</div>
-        <div className="text-right">Amount (SUI)</div>
-        <div className="text-right">Total (USDC)</div>
-        <div className="text-right">Time</div>
-      </div>
-
-      <div className="animate-pulse">
+      <div className="trades-loading">
         {Array.from({ length: 10 }).map((_, i) => (
-          <div
-            key={i}
-            className="grid grid-cols-4 text-sm border-b border-gray-700 py-2 px-2"
-          >
-            <div className="h-4 bg-gray-700 rounded w-20"></div>
-            <div className="h-4 bg-gray-700 rounded w-16 ml-auto"></div>
-            <div className="h-4 bg-gray-700 rounded w-24 ml-auto"></div>
-            <div className="h-4 bg-gray-700 rounded w-16 ml-auto"></div>
+          <div key={i} className="loading-row">
+            <div className="loading-item" />
+            <div className="loading-item" />
+            <div className="loading-item" />
+            <div className="loading-item" />
           </div>
         ))}
       </div>
@@ -93,7 +80,12 @@ export function RecentTradesLoading() {
   );
 }
 
-export function aggregateTrades(trades: Trade[], interval: number = 1000): Trade[] {
+// ... (keep all the existing utility functions)
+
+export function aggregateTrades(
+  trades: Trade[],
+  interval: number = 1000
+): Trade[] {
   const aggregatedTrades = new Map<string, Trade>();
 
   trades.forEach((trade) => {
@@ -114,8 +106,9 @@ export function aggregateTrades(trades: Trade[], interval: number = 1000): Trade
     }
   });
 
-  return Array.from(aggregatedTrades.values())
-    .sort((a, b) => b.timestamp - a.timestamp);
+  return Array.from(aggregatedTrades.values()).sort(
+    (a, b) => b.timestamp - a.timestamp
+  );
 }
 
 export interface TradeHistoryFilters {
@@ -127,14 +120,19 @@ export interface TradeHistoryFilters {
   maxQuantity?: number;
 }
 
-export function filterTrades(trades: Trade[], filters: TradeHistoryFilters): Trade[] {
+export function filterTrades(
+  trades: Trade[],
+  filters: TradeHistoryFilters
+): Trade[] {
   return trades.filter((trade) => {
     if (filters.startTime && trade.timestamp < filters.startTime) return false;
     if (filters.endTime && trade.timestamp > filters.endTime) return false;
     if (filters.minPrice && trade.price < filters.minPrice) return false;
     if (filters.maxPrice && trade.price > filters.maxPrice) return false;
-    if (filters.minQuantity && trade.quantity < filters.minQuantity) return false;
-    if (filters.maxQuantity && trade.quantity > filters.maxQuantity) return false;
+    if (filters.minQuantity && trade.quantity < filters.minQuantity)
+      return false;
+    if (filters.maxQuantity && trade.quantity > filters.maxQuantity)
+      return false;
     return true;
   });
 }

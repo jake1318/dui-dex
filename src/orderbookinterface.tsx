@@ -1,3 +1,9 @@
+/**
+ * @file src/orderbookinterface.tsx
+ * Last updated: 2025-01-24 06:35:55
+ * Author: jake1318
+ */
+
 import { useState, useEffect } from "react";
 import {
   useCurrentAccount,
@@ -7,7 +13,7 @@ import {
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { type SuiClient } from "@mysten/sui/client";
-import { BcsWriter } from "@mysten/bcs"; // Correct import for BCS
+import { BcsWriter } from "@mysten/bcs";
 import {
   DEEPBOOK,
   getPoolData,
@@ -32,6 +38,7 @@ import {
 import { TradingChart } from "./tradingchart";
 import { OrderBook } from "./orderbook";
 import { RecentTrades } from "./recenttrades";
+import "./orderbookinterface.css";
 
 interface Token {
   symbol: string;
@@ -53,13 +60,10 @@ const TOKENS: Token[] = [
     name: "USD Coin",
     address: TOKEN_TYPES.USDC,
     decimals: 6,
-    poolId: "", // Will be set after initialization
+    poolId: "",
   },
 ];
 
-/**
- * Type-safe utility function for converting SuiClient instances between versions
- */
 const castToCompatibleSuiClient = (client: unknown): SuiClient => {
   return client as SuiClient;
 };
@@ -223,7 +227,6 @@ export function OrderBookInterface() {
         throw new Error(ERRORS.INVALID_AMOUNT);
       }
 
-      // Updated serialization method using BcsWriter
       const writer = new BcsWriter();
       writer.write64(amountInBaseUnits);
       const amountInBaseUnitsSerialized = writer.toBytes();
@@ -238,7 +241,6 @@ export function OrderBookInterface() {
           throw new Error(ERRORS.INVALID_PRICE);
         }
 
-        // Updated serialization method using BcsWriter
         const priceWriter = new BcsWriter();
         priceWriter.write64(priceInBaseUnits);
         const priceInBaseUnitsSerialized = priceWriter.toBytes();
@@ -278,7 +280,7 @@ export function OrderBookInterface() {
       }
 
       await signAndExecuteTransactionBlock({
-        transactionBlock: txb as any, // Type assertion to handle version mismatch
+        transactionBlock: txb as any,
         options: {
           showEffects: true,
           showObjectChanges: true,
@@ -308,122 +310,116 @@ export function OrderBookInterface() {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4 p-4">
-      {notification && (
-        <div className="col-span-12">
-          <div
-            className={`p-4 rounded-lg ${
-              notification.type === "success"
-                ? "bg-green-500"
-                : notification.type === "error"
-                ? "bg-red-500"
-                : "bg-blue-500"
-            }`}
-          >
+    <div className="dex-container">
+      <div className="dex-grid">
+        {notification && (
+          <div className={`notification ${notification.type}`}>
             {notification.message}
-          </div>
-        </div>
-      )}
-
-      <div className="col-span-8 bg-gray-800 rounded-lg p-4">
-        <TradingChart candlesticks={candlesticks} width={800} height={400} />
-      </div>
-
-      <div className="col-span-4 bg-gray-800 rounded-lg p-4">
-        <div className="flex gap-2 mb-4">
-          <button
-            className={`flex-1 p-2 rounded ${
-              orderType === "limit" ? "bg-blue-500" : "bg-gray-700"
-            }`}
-            onClick={() => setOrderType("limit")}
-          >
-            Limit
-          </button>
-          <button
-            className={`flex-1 p-2 rounded ${
-              orderType === "market" ? "bg-blue-500" : "bg-gray-700"
-            }`}
-            onClick={() => setOrderType("market")}
-          >
-            Market
-          </button>
-        </div>
-
-        <div className="flex gap-2 mb-4">
-          <button
-            className={`flex-1 p-2 rounded ${
-              orderSide === "buy" ? "bg-green-500" : "bg-gray-700"
-            }`}
-            onClick={() => setOrderSide("buy")}
-          >
-            Buy
-          </button>
-          <button
-            className={`flex-1 p-2 rounded ${
-              orderSide === "sell" ? "bg-red-500" : "bg-gray-700"
-            }`}
-            onClick={() => setOrderSide("sell")}
-          >
-            Sell
-          </button>
-        </div>
-
-        {orderType === "limit" && (
-          <div className="mb-4">
-            <label className="block text-sm mb-1">Price (USDC)</label>
-            <input
-              type="number"
-              className="w-full bg-gray-700 rounded p-2"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              min="0"
-              step="0.000001"
-              placeholder="Enter price"
-            />
           </div>
         )}
 
-        <div className="mb-4">
-          <label className="block text-sm mb-1">Amount (SUI)</label>
-          <input
-            type="number"
-            className="w-full bg-gray-700 rounded p-2"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            min="0"
-            step="0.000001"
-            placeholder="Enter amount"
+        <div className="chart-container dex-card">
+          <TradingChart candlesticks={candlesticks} width={800} height={400} />
+        </div>
+
+        <div className="trading-form dex-card">
+          <div className="order-type-group">
+            <button
+              className={`order-button ${
+                orderType === "limit" ? "active" : ""
+              }`}
+              onClick={() => setOrderType("limit")}
+            >
+              Limit
+            </button>
+            <button
+              className={`order-button ${
+                orderType === "market" ? "active" : ""
+              }`}
+              onClick={() => setOrderType("market")}
+            >
+              Market
+            </button>
+          </div>
+
+          <div className="trade-type-group">
+            <button
+              className={`trade-button buy ${
+                orderSide === "buy" ? "active" : ""
+              }`}
+              onClick={() => setOrderSide("buy")}
+            >
+              Buy
+            </button>
+            <button
+              className={`trade-button sell ${
+                orderSide === "sell" ? "active" : ""
+              }`}
+              onClick={() => setOrderSide("sell")}
+            >
+              Sell
+            </button>
+          </div>
+
+          {orderType === "limit" && (
+            <div className="form-group">
+              <label className="form-label">Price (USDC)</label>
+              <input
+                type="number"
+                className="form-input"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                min="0"
+                step="0.000001"
+                placeholder="Enter price"
+              />
+            </div>
+          )}
+
+          <div className="form-group">
+            <label className="form-label">Amount (SUI)</label>
+            <input
+              type="number"
+              className="form-input"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              min="0"
+              step="0.000001"
+              placeholder="Enter amount"
+            />
+          </div>
+
+          {!currentAccount ? (
+            <ConnectButton className="connect-button" />
+          ) : (
+            <button
+              className={`trade-button ${orderSide} active`}
+              onClick={handlePlaceOrder}
+              disabled={isLoading}
+            >
+              {isLoading ? "Processing..." : `Place ${orderSide} order`}
+            </button>
+          )}
+        </div>
+
+        <div className="orderbook-container dex-card">
+          <OrderBook
+            bids={bids}
+            asks={asks}
+            onSelect={(price) => setPrice(price.toString())}
           />
         </div>
 
-        {!currentAccount ? (
-          <ConnectButton className="w-full p-3 rounded-lg font-bold bg-blue-500 hover:bg-blue-600" />
-        ) : (
-          <button
-            className={`w-full p-3 rounded-lg font-bold ${
-              orderSide === "buy"
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-red-500 hover:bg-red-600"
-            }`}
-            onClick={handlePlaceOrder}
-            disabled={isLoading}
-          >
-            {isLoading ? "Processing..." : `Place ${orderSide} order`}
-          </button>
-        )}
+        <div className="trades-container dex-card">
+          <RecentTrades trades={recentTrades} />
+        </div>
       </div>
 
-      <div className="col-span-6 bg-gray-800 rounded-lg p-4">
-        <OrderBook
-          bids={bids}
-          asks={asks}
-          onSelect={(price) => setPrice(price.toString())}
-        />
-      </div>
-
-      <div className="col-span-6 bg-gray-800 rounded-lg p-4">
-        <RecentTrades trades={recentTrades} />
-      </div>
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
     </div>
   );
 }

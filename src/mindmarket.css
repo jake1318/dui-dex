@@ -1,0 +1,117 @@
+/* General Styling for MindExchangePage */
+.mind-exchange {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e1e1e, #000000);
+  color: #00a3ff;
+  font-family: "Orbitron", sans-serif;
+}
+
+.exchange-container {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  padding: 30px;
+  background: rgba(30, 30, 30, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 230, 255, 0.5);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px #00e6ff;
+}
+
+.description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #87cefa;
+  text-shadow: 0 0 5px #87cefa;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.agent-card {
+  background: rgba(20, 20, 20, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 230, 255, 0.3);
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.agent-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.6);
+}
+
+.agent-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #00a3ff;
+  text-shadow: 0 0 5px #00e6ff;
+}
+
+.agent-card p {
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.price {
+  color: #87cefa;
+  font-weight: bold;
+}
+
+.hire-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #00a3ff;
+  color: #1a1a1a;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 230, 255, 0.6);
+}
+
+.hire-button:hover {
+  background: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+}
+
+.selected-agent {
+  margin-top: 2rem;
+  padding: 20px;
+  border: 1px solid #00a3ff;
+  background: rgba(20, 20, 20, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 230, 255, 0.5);
+  color: #e0e0e0;
+}
+/* Ensure the selected agent section is styled properly */
+.selected-agent {
+  background-color: rgba(30, 30, 30, 0.9);
+  border: 1px solid #00a3ff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px; /* Space between the agents grid and selected agent */
+  box-shadow: 0 0 10px rgba(0, 163, 255, 0.5);
+  text-align: center;
+  color: #e0e0e0;
+}
+
+/* Ensure proper spacing and layout for small screens */
+@media (max-width: 768px) {
+  .selected-agent {
+    margin: 10px;
+    padding: 15px;
+  }
+}

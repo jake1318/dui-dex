@@ -1,0 +1,22 @@
+/**
+ * @file src/components/PageLayout.css
+ * Last updated: 2025-01-24 07:50:56
+ * Author: jake1318
+ */
+
+.page-layout {
+  min-height: calc(100vh - 80px); /* Adjust based on your navbar height */
+  padding: 2rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.half-width {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.full-width {
+  max-width: 100%;
+  padding: 0;
+}

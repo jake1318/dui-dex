@@ -1,4 +1,9 @@
-// src/components/OrderBook.tsx
+/**
+ * @file OrderBook.tsx
+ * Last updated: 2025-01-24 03:00:29
+ * Author: jake1318
+ */
+
 import { useState } from "react";
 import { OrderBookEntry } from "./types";
 import { formatPrice, formatAmount } from "./utils";
@@ -24,62 +29,75 @@ export function OrderBook({
   };
 
   return (
-    <div className="w-full">
-      <h3 className="text-lg font-bold mb-4">Order Book</h3>
-
-      <div className="grid grid-cols-3 text-sm font-semibold mb-2">
-        <div>Price (USDC)</div>
-        <div className="text-right">Amount (SUI)</div>
-        <div className="text-right">Total</div>
-      </div>
-
-      {/* Asks */}
-      <div className="mb-2">
-        {asks.slice(0, maxRows).map((ask, i) => (
-          <div
-            key={`ask-${i}`}
-            className={`grid grid-cols-3 text-sm cursor-pointer hover:bg-gray-700
-              ${selectedPrice === ask.price ? "bg-gray-700" : ""}`}
-            onClick={() => handlePriceSelect(ask.price)}
-          >
-            <div className="text-red-500">{formatPrice(ask.price)}</div>
-            <div className="text-right">{formatAmount(ask.quantity)}</div>
-            <div className="text-right">{formatAmount(ask.total)}</div>
-            <div
-              className="absolute right-0 h-full bg-red-500/10"
-              style={{ width: `${ask.depth}%` }}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Spread */}
-      {bids.length > 0 && asks.length > 0 && (
-        <div className="text-center text-sm text-gray-500 my-2">
-          Spread: {formatPrice(asks[0].price - bids[0].price)} (
-          {(((asks[0].price - bids[0].price) / bids[0].price) * 100).toFixed(2)}
-          %)
+    <div className="orderbook-container">
+      <div className="orderbook-header">
+        <div className="column-labels">
+          <div className="label">Price (USDC)</div>
+          <div className="label text-right">Amount (SUI)</div>
+          <div className="label text-right">Total</div>
         </div>
-      )}
+      </div>
 
-      {/* Bids */}
-      <div>
-        {bids.slice(0, maxRows).map((bid, i) => (
-          <div
-            key={`bid-${i}`}
-            className={`grid grid-cols-3 text-sm cursor-pointer hover:bg-gray-700
-              ${selectedPrice === bid.price ? "bg-gray-700" : ""}`}
-            onClick={() => handlePriceSelect(bid.price)}
-          >
-            <div className="text-green-500">{formatPrice(bid.price)}</div>
-            <div className="text-right">{formatAmount(bid.quantity)}</div>
-            <div className="text-right">{formatAmount(bid.total)}</div>
+      <div className="orderbook-content">
+        {/* Asks */}
+        <div className="asks-container">
+          {asks.slice(0, maxRows).map((ask, i) => (
             <div
-              className="absolute right-0 h-full bg-green-500/10"
-              style={{ width: `${bid.depth}%` }}
-            />
+              key={`ask-${i}`}
+              className={`order-row ask ${
+                selectedPrice === ask.price ? "selected" : ""
+              }`}
+              onClick={() => handlePriceSelect(ask.price)}
+            >
+              <div className="price">{formatPrice(ask.price)}</div>
+              <div className="amount">{formatAmount(ask.quantity)}</div>
+              <div className="total">{formatAmount(ask.total)}</div>
+              <div
+                className="depth-indicator ask"
+                style={{ width: `${ask.depth}%` }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Spread */}
+        {bids.length > 0 && asks.length > 0 && (
+          <div className="spread-indicator">
+            <span className="spread-label">Spread:</span>
+            <span className="spread-value">
+              {formatPrice(asks[0].price - bids[0].price)}
+            </span>
+            <span className="spread-percentage">
+              (
+              {(
+                ((asks[0].price - bids[0].price) / bids[0].price) *
+                100
+              ).toFixed(2)}
+              %)
+            </span>
           </div>
-        ))}
+        )}
+
+        {/* Bids */}
+        <div className="bids-container">
+          {bids.slice(0, maxRows).map((bid, i) => (
+            <div
+              key={`bid-${i}`}
+              className={`order-row bid ${
+                selectedPrice === bid.price ? "selected" : ""
+              }`}
+              onClick={() => handlePriceSelect(bid.price)}
+            >
+              <div className="price">{formatPrice(bid.price)}</div>
+              <div className="amount">{formatAmount(bid.quantity)}</div>
+              <div className="total">{formatAmount(bid.total)}</div>
+              <div
+                className="depth-indicator bid"
+                style={{ width: `${bid.depth}%` }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

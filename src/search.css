@@ -1,0 +1,191 @@
+/**
+ * @file src/pages/search.css
+ * Last updated: 2025-01-24
+ * Author: jake1318
+ */
+
+/* Global Styling */
+body {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    135deg,
+    #000,
+    #1e1e1e
+  ); /* Single consistent gradient */
+  font-family: "Orbitron", sans-serif;
+  color: #fff;
+}
+
+/* Main container for the search page */
+.mind-search {
+  min-height: calc(100vh - 40px); /* Subtracts footer height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers content vertically */
+  align-items: center; /* Centers content horizontally */
+  background: linear-gradient(
+    135deg,
+    #000000,
+    #1e1e1e
+  ); /* Matches other pages */
+  color: #00a3ff;
+  padding: 20px;
+}
+
+/* Container for search content */
+.container {
+  flex-grow: 0; /* Ensures it does not expand unnecessarily */
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  padding: 30px;
+  background: rgba(30, 30, 30, 0.95); /* Slightly transparent */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.5);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Title styling */
+.title {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 12px #00a3ff;
+}
+
+/* Description text below the title */
+.description {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  color: #87cefa;
+  text-shadow: 0 0 8px #87cefa;
+}
+
+/* Search box styling */
+.search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2.5rem;
+}
+
+.search-input {
+  width: 70%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #00a3ff;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  box-shadow: 0 0 12px rgba(0, 230, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.8);
+  border-color: #00ffff;
+}
+
+.search-button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  background: #00a3ff;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 230, 255, 0.6);
+}
+
+.search-button:hover {
+  background: #00ffff;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+}
+
+/* Error message styling */
+.error-message {
+  font-size: 1rem;
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 5px rgba(255, 107, 107, 0.8);
+}
+
+/* Search result styling */
+.search-result {
+  margin-top: 1.5rem;
+  padding: 20px;
+  background: rgba(30, 30, 30, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 230, 255, 0.4);
+  text-align: left;
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px #00e6ff;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.search-result h2 {
+  font-size: 1.5rem;
+  color: #00ffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.search-result p {
+  font-size: 1rem;
+  color: #d4d4d4;
+  line-height: 1.6;
+}
+
+/* Footer styling */
+footer {
+  text-align: center;
+  padding: 10px 0;
+  background-color: #141414; /* Matches the theme */
+  color: #e0e0e0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsiveness for smaller devices */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .search-button {
+    font-size: 1rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .search-result {
+    font-size: 1rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

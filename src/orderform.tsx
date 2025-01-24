@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { OrderType, OrderSide } from "./types";
+import "./orderform.css";
 
 interface OrderFormProps {
   onSubmit: (order: {
