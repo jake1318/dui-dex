@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@mysten/dapp-kit": "^0.11.0",
+    "@mysten/bcs": "^0.6.0",
     "@mysten/sui": "^1.20.0",
-    "@mysten/sui.js": "^0.54.1",
     "@tanstack/react-query": "^5.17.19",
     "date-fns": "^4.1.0",
     "lightweight-charts": "^4.2.2",
@@ -35,5 +35,8 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^5.0.8"
+  },
+  "resolutions": {
+    "@mysten/bcs": "^0.11.1"
   }
 }

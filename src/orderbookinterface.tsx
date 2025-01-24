@@ -1,7 +1,3 @@
-// src/OrderBookInterface.tsx
-// Last updated: 2025-01-23 07:27:03 UTC
-// Author: jake1318
-
 import { useState, useEffect } from "react";
 import {
   useCurrentAccount,
@@ -9,9 +5,9 @@ import {
   ConnectButton,
   useSuiClient,
 } from "@mysten/dapp-kit";
-import { Transaction } from "@mysten/sui/transactions"; // Correct import for Transaction
+import { Transaction } from "@mysten/sui/transactions";
 import { type SuiClient } from "@mysten/sui/client";
-import { bcs } from "@mysten/bcs"; // Correct import for BCS
+import { BcsWriter } from "@mysten/bcs"; // Correct import for BCS
 import {
   DEEPBOOK,
   getPoolData,
@@ -227,7 +223,10 @@ export function OrderBookInterface() {
         throw new Error(ERRORS.INVALID_AMOUNT);
       }
 
-      const amountInBaseUnitsSerialized = bcs.ser("u64", amountInBaseUnits);
+      // Updated serialization method using BcsWriter
+      const writer = new BcsWriter();
+      writer.write64(amountInBaseUnits);
+      const amountInBaseUnitsSerialized = writer.toBytes();
 
       if (orderType === "limit") {
         const [coin] = txb.splitCoins(txb.gas, [
@@ -239,7 +238,10 @@ export function OrderBookInterface() {
           throw new Error(ERRORS.INVALID_PRICE);
         }
 
-        const priceInBaseUnitsSerialized = bcs.ser("u64", priceInBaseUnits);
+        // Updated serialization method using BcsWriter
+        const priceWriter = new BcsWriter();
+        priceWriter.write64(priceInBaseUnits);
+        const priceInBaseUnitsSerialized = priceWriter.toBytes();
 
         txb.moveCall({
           target: `${DEEPBOOK.PACKAGE_ID}::clob::place_limit_order`,
