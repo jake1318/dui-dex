@@ -1,28 +1,59 @@
-/* General Styling for MindExchangePage */
-.mind-exchange {
+/**
+ * @file src/styles/mindmarket.css
+ * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-25 18:42:02
+ * Current User's Login: jake1318
+ */
+
+:root {
+  --header-height: 64px;
+  --primary-color: #00a3ff;
+  --secondary-color: #00e6ff;
+  --text-color: #e0e0e0;
+  --card-bg: rgba(20, 20, 20, 0.9);
+  --container-bg: rgba(30, 30, 30, 0.9);
+}
+
+/* Root Container */
+.mind-exchange-wrapper {
   min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #1e1e1e, #000000);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  padding-top: var(--header-height);
+}
+
+/* Main Container */
+.mind-exchange {
+  min-height: calc(100vh - var(--header-height));
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #1e1e1e, #000000);
-  color: #00a3ff;
+  align-items: flex-start;
+  padding: 2rem 0;
+  color: var(--primary-color);
   font-family: "Orbitron", sans-serif;
 }
 
 .exchange-container {
   text-align: center;
-  max-width: 800px;
-  width: 100%;
+  max-width: 1200px;
+  width: 90%;
+  margin: 1rem auto 0;
   padding: 30px;
-  background: rgba(30, 30, 30, 0.9);
+  background: var(--container-bg);
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 230, 255, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .title {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px #00e6ff;
+  text-shadow: 0 0 10px var(--secondary-color);
 }
 
 .description {
@@ -34,17 +65,22 @@
 
 .agents-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
+  margin-bottom: 2rem;
 }
 
 .agent-card {
-  background: rgba(20, 20, 20, 0.9);
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 230, 255, 0.3);
   transition: all 0.3s ease;
   text-align: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .agent-card:hover {
@@ -55,63 +91,177 @@
 .agent-card h3 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
-  color: #00a3ff;
-  text-shadow: 0 0 5px #00e6ff;
+  color: var(--primary-color);
+  text-shadow: 0 0 5px var(--secondary-color);
 }
 
 .agent-card p {
   font-size: 1rem;
-  color: #e0e0e0;
+  color: var(--text-color);
   margin-bottom: 1rem;
 }
 
 .price {
   color: #87cefa;
   font-weight: bold;
+  margin-top: auto;
 }
 
 .hire-button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background: #00a3ff;
+  background: var(--primary-color);
   color: #1a1a1a;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px rgba(0, 230, 255, 0.6);
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .hire-button:hover {
-  background: #00ffff;
+  background: var(--secondary-color);
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.hire-button:active {
+  transform: translateY(0);
 }
 
 .selected-agent {
   margin-top: 2rem;
   padding: 20px;
-  border: 1px solid #00a3ff;
+  border: 1px solid var(--primary-color);
   background: rgba(20, 20, 20, 0.8);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 230, 255, 0.5);
-  color: #e0e0e0;
-}
-/* Ensure the selected agent section is styled properly */
-.selected-agent {
-  background-color: rgba(30, 30, 30, 0.9);
-  border: 1px solid #00a3ff;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px; /* Space between the agents grid and selected agent */
-  box-shadow: 0 0 10px rgba(0, 163, 255, 0.5);
-  text-align: center;
-  color: #e0e0e0;
+  color: var(--text-color);
+  backdrop-filter: blur(5px);
 }
 
-/* Ensure proper spacing and layout for small screens */
+/* Responsive Design */
 @media (max-width: 768px) {
+  .exchange-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .agents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
   .selected-agent {
-    margin: 10px;
+    margin: 1rem 0;
     padding: 15px;
+  }
+}
+
+/* Scrollbar Styling */
+.mind-exchange-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.mind-exchange-wrapper::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.5);
+}
+
+.mind-exchange-wrapper::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.mind-exchange-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* Loading States */
+.agent-card.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.agent-card.loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 163, 255, 0.2),
+    transparent
+  );
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Smooth Transitions */
+.agent-card,
+.hire-button,
+.selected-agent {
+  will-change: transform, box-shadow;
+}
+
+/* Focus States */
+.hire-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 163, 255, 0.5);
+}
+
+/* Error States */
+.agent-card.error {
+  border: 1px solid #ff4444;
+}
+
+/* Success States */
+.agent-card.success {
+  border: 1px solid #00ff00;
+}
+
+/* Hover Effects */
+.agent-card:hover h3 {
+  color: var(--secondary-color);
+}
+
+.agent-card:hover .price {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Print Styles */
+@media print {
+  .mind-exchange-wrapper {
+    position: relative;
+    padding: 0;
+  }
+
+  .hire-button {
+    display: none;
+  }
+
+  .agent-card {
+    break-inside: avoid;
+    box-shadow: none;
   }
 }

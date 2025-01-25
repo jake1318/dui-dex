@@ -1,4 +1,8 @@
-/* OrderForm Styles */
+/**
+ * @file src/components/orderbook/orderform.css
+ * Current Date and Time (UTC): 2025-01-25 18:32:35
+ * Author: jake1318
+ */
 
 /* Form Container */
 form {
@@ -6,6 +10,7 @@ form {
   background-color: #1c1f26;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
 }
 
 /* Buttons */
@@ -16,7 +21,7 @@ button {
   border-radius: 6px;
   font-weight: bold;
   font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 button:hover:not([disabled]) {
@@ -28,10 +33,98 @@ button:disabled {
   opacity: 0.6;
 }
 
+/* Percentage Buttons */
+.grid-cols-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.grid-cols-4 button {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.grid-cols-4 button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #2a2d35 !important;
+}
+
+/* Connect Wallet Container */
+.connect-wallet-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Connect Wallet Overlay */
+.connect-wallet-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(28, 31, 38, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #fff;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Utility Classes */
 .flex-1 {
   flex: 1;
 }
 
+/* Form Disabled State */
+.form-disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Button Colors */
 .bg-blue-500 {
   background-color: #007bff;
   color: #ffffff;
@@ -52,12 +145,47 @@ button:disabled {
   color: #ffffff;
 }
 
+/* Hover States */
+.hover\:bg-gray-600:hover {
+  background-color: #4a4a4a;
+}
+
 .hover\:bg-green-600:hover {
   background-color: #27ae60;
 }
 
 .hover\:bg-red-600:hover {
   background-color: #c0392b;
+}
+
+/* Active States */
+.active\:bg-gray-500:active {
+  background-color: #555555;
+}
+
+.active\:bg-green-700:active {
+  background-color: #219a52;
+}
+
+.active\:bg-red-700:active {
+  background-color: #a93226;
+}
+
+/* Connect Button Styles */
+.connect-button {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.connect-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 /* Labels */
@@ -77,6 +205,7 @@ input[type="number"] {
   background-color: #2a2d35;
   color: #e6e6e6;
   font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 input[type="number"]::placeholder {
@@ -89,12 +218,79 @@ input[type="number"]:focus {
   box-shadow: 0 0 5px rgba(0, 163, 255, 0.8);
 }
 
+/* Ring Effect for Selected Percentage */
+.ring-2 {
+  box-shadow: 0 0 0 2px #007bff;
+}
+
+.ring-blue-500 {
+  --ring-color: #007bff;
+}
+
 /* Margins and Gaps */
 .mb-4 {
   margin-bottom: 1rem;
 }
 
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .flex {
   display: flex;
   gap: 0.5rem;
+}
+
+/* Shadow Effects */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Transform Effects */
+.hover\:-translate-y-0\.5:hover {
+  transform: translateY(-2px);
+}
+
+.active\:translate-y-0:active {
+  transform: translateY(0);
+}
+
+/* Transitions */
+.transition-all {
+  transition-property: all;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+/* Tooltip Styles */
+[title] {
+  position: relative;
+}
+
+[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
 }

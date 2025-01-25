@@ -38,7 +38,7 @@ export function Navbar() {
             </li>
             <li className="nav-item">
               <Link to="/orderbook" className="nav-link">
-                DEX
+                Mind DEX
               </Link>
             </li>
           </ul>

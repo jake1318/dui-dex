@@ -1,7 +1,13 @@
-import { useState } from "react";
-import "./mindmarket.css"; // Ensure you have this CSS file linked
+// mindmarket.tsx
+/**
+ * @file src/pages/mindmarket.tsx
+ * Current Date and Time (UTC): 2025-01-25 18:38:35
+ * Author: jake1318
+ */
 
-// Define the Agent interface
+import { useState } from "react";
+import "./mindmarket.css";
+
 interface Agent {
   id: number;
   name: string;
@@ -10,7 +16,6 @@ interface Agent {
 }
 
 function MindExchangePage() {
-  // Use the Agent type for selectedAgent, allowing null as the initial state
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
   const agents: Agent[] = [
@@ -47,31 +52,36 @@ function MindExchangePage() {
   };
 
   return (
-    <div className="mind-exchange">
-      <div className="exchange-container">
-        <h1 className="title">Mind Exchange</h1>
-        <p className="description">
-          Select and hire from our marketplace of powerful AI agents.
-        </p>
-        <div className="agents-grid">
-          {agents.map((agent) => (
-            <div key={agent.id} className="agent-card">
-              <h3>{agent.name}</h3>
-              <p>{agent.description}</p>
-              <p className="price">{agent.price}</p>
-              <button className="hire-button" onClick={() => handleHire(agent)}>
-                Hire Agent
-              </button>
-            </div>
-          ))}
-        </div>
-        {selectedAgent && (
-          <div className="selected-agent">
-            <h2>Selected Agent:</h2>
-            <p>{selectedAgent.name}</p>
-            <p>{selectedAgent.description}</p>
+    <div className="mind-exchange-wrapper">
+      <div className="mind-exchange">
+        <div className="exchange-container">
+          <h1 className="title">Mind Exchange</h1>
+          <p className="description">
+            Select and hire from our marketplace of powerful AI agents.
+          </p>
+          <div className="agents-grid">
+            {agents.map((agent) => (
+              <div key={agent.id} className="agent-card">
+                <h3>{agent.name}</h3>
+                <p>{agent.description}</p>
+                <p className="price">{agent.price}</p>
+                <button
+                  className="hire-button"
+                  onClick={() => handleHire(agent)}
+                >
+                  Hire Agent
+                </button>
+              </div>
+            ))}
           </div>
-        )}
+          {selectedAgent && (
+            <div className="selected-agent">
+              <h2>Selected Agent:</h2>
+              <p>{selectedAgent.name}</p>
+              <p>{selectedAgent.description}</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

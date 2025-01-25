@@ -1,0 +1,205 @@
+/**
+ * @file src/tradingchart.css
+ * Last updated: 2025-01-25 00:47:34
+ * Author: jake1318
+ */
+
+/* Chart Container */
+.chart-wrapper {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid #00a3ff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 0 30px rgba(0, 230, 255, 0.3);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.5s ease-in-out;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+/* Chart Controls Container */
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(0, 163, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.chart-controls:hover {
+  border-color: #00ffff;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+/* Timeframe Selector */
+.timeframe-selector {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(26, 26, 26, 0.95);
+  border-radius: 8px;
+}
+
+/* Indicator Selector */
+.indicator-selector {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(26, 26, 26, 0.95);
+  border-radius: 8px;
+}
+
+/* Button Styles */
+.timeframe-button,
+.indicator-button {
+  background: transparent;
+  border: 1px solid #00a3ff;
+  color: #00a3ff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Orbitron", sans-serif;
+  min-width: 60px;
+  text-align: center;
+}
+
+.timeframe-button:hover,
+.indicator-button:hover {
+  background: rgba(0, 163, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 163, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.timeframe-button.active,
+.indicator-button.active {
+  background: linear-gradient(135deg, #00a3ff, #00ffff);
+  color: #1a1a1a;
+  border: none;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+/* Chart Container */
+div[ref="chartContainerRef"] {
+  width: 100%;
+  height: calc(100% - 70px); /* Subtract the height of controls */
+  min-height: 400px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.chart-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 26, 26, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 163, 255, 0.1);
+  border-top-color: #00ffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Tooltips */
+.chart-tooltip {
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #00a3ff;
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: #e0e0e0;
+  box-shadow: 0 0 10px rgba(0, 163, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    padding: 1rem;
+  }
+
+  .chart-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .timeframe-selector,
+  .indicator-selector {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .timeframe-button,
+  .indicator-button {
+    padding: 0.4rem 0.8rem;
+    min-width: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-wrapper {
+    min-height: 400px;
+    margin: 0.5rem 0;
+  }
+
+  .chart-controls {
+    padding: 0.75rem;
+  }
+
+  div[ref="chartContainerRef"] {
+    min-height: 300px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .chart-wrapper,
+  .timeframe-button,
+  .indicator-button {
+    animation: none;
+    transition: none;
+  }
+
+  .timeframe-button:hover,
+  .indicator-button:hover {
+    transform: none;
+  }
+}

@@ -1,7 +1,7 @@
 /**
  * @file src/orderbookinterface.tsx
- * Last updated: 2025-01-24 06:35:55
- * Author: jake1318
+ * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-25 18:28:40
+ * Current User's Login: jake1318
  */
 
 import { useState, useEffect } from "react";
@@ -38,6 +38,7 @@ import {
 import { TradingChart } from "./tradingchart";
 import { OrderBook } from "./orderbook";
 import { RecentTrades } from "./recenttrades";
+import { OrderForm } from "./orderform";
 import "./orderbookinterface.css";
 
 interface Token {
@@ -74,11 +75,12 @@ export function OrderBookInterface() {
   const { mutate: signAndExecuteTransactionBlock } =
     useSignAndExecuteTransactionBlock();
 
-  // Market states
-  const [orderType, setOrderType] = useState<OrderType>("limit");
+  // Market state
   const [orderSide, setOrderSide] = useState<OrderSide>("buy");
-  const [price, setPrice] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
+
+  // Balance states
+  const [suiBalance, setSuiBalance] = useState<number>(0);
+  const [usdcBalance, setUsdcBalance] = useState<number>(0);
 
   // Order book states
   const [bids, setBids] = useState<OrderBookEntry[]>([]);
@@ -92,6 +94,34 @@ export function OrderBookInterface() {
   const [notification, setNotification] = useState<NotificationConfig | null>(
     null
   );
+
+  const fetchBalances = async () => {
+    if (!currentAccount || !suiClient) return;
+
+    try {
+      const compatibleClient = castToCompatibleSuiClient(suiClient);
+
+      // Fetch SUI balance
+      const suiBalance = await compatibleClient.getBalance({
+        owner: currentAccount.address,
+        coinType: TOKEN_TYPES.SUI,
+      });
+      setSuiBalance(
+        Number(suiBalance.totalBalance) / Math.pow(10, TOKENS[0].decimals)
+      );
+
+      // Fetch USDC balance
+      const usdcBalance = await compatibleClient.getBalance({
+        owner: currentAccount.address,
+        coinType: TOKEN_TYPES.USDC,
+      });
+      setUsdcBalance(
+        Number(usdcBalance.totalBalance) / Math.pow(10, TOKENS[1].decimals)
+      );
+    } catch (error) {
+      console.error("Error fetching balances:", error);
+    }
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -138,6 +168,10 @@ export function OrderBookInterface() {
 
     return () => clearInterval(intervalId);
   }, [suiClient, isInitialized]);
+
+  useEffect(() => {
+    fetchBalances();
+  }, [currentAccount, suiClient]);
 
   const fetchOrderBookData = async (client: SuiClient) => {
     try {
@@ -194,7 +228,12 @@ export function OrderBookInterface() {
       });
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (order: {
+    type: OrderType;
+    side: OrderSide;
+    price: number;
+    amount: number;
+  }) => {
     if (!currentAccount || !isInitialized) {
       setNotification(
         createNotification("Please connect your wallet", "error")
@@ -202,14 +241,13 @@ export function OrderBookInterface() {
       return;
     }
 
-    const priceValue = orderType === "limit" ? parseFloat(price) : 0;
-    const amountValue = parseFloat(amount);
+    setOrderSide(order.side);
 
     const validation = validateOrder(
-      priceValue,
-      amountValue,
+      order.price,
+      order.amount,
       BigInt(0),
-      orderSide
+      order.side
     );
     if (!validation.isValid) {
       setNotification(
@@ -221,7 +259,10 @@ export function OrderBookInterface() {
     setIsLoading(true);
     try {
       const txb = new Transaction();
-      const amountInBaseUnits = parseInputAmount(amount, TOKENS[0].decimals);
+      const amountInBaseUnits = parseInputAmount(
+        order.amount.toString(),
+        TOKENS[0].decimals
+      );
 
       if (!amountInBaseUnits) {
         throw new Error(ERRORS.INVALID_AMOUNT);
@@ -231,11 +272,14 @@ export function OrderBookInterface() {
       writer.write64(amountInBaseUnits);
       const amountInBaseUnitsSerialized = writer.toBytes();
 
-      if (orderType === "limit") {
+      if (order.type === "limit") {
         const [coin] = txb.splitCoins(txb.gas, [
           txb.pure(amountInBaseUnitsSerialized),
         ]);
-        const priceInBaseUnits = parseInputAmount(price, TOKENS[1].decimals);
+        const priceInBaseUnits = parseInputAmount(
+          order.price.toString(),
+          TOKENS[1].decimals
+        );
 
         if (!priceInBaseUnits) {
           throw new Error(ERRORS.INVALID_PRICE);
@@ -248,8 +292,8 @@ export function OrderBookInterface() {
         txb.moveCall({
           target: `${DEEPBOOK.PACKAGE_ID}::clob::place_limit_order`,
           typeArguments: [
-            orderSide === "buy" ? TOKEN_TYPES.USDC : TOKEN_TYPES.SUI,
-            orderSide === "buy" ? TOKEN_TYPES.SUI : TOKEN_TYPES.USDC,
+            order.side === "buy" ? TOKEN_TYPES.USDC : TOKEN_TYPES.SUI,
+            order.side === "buy" ? TOKEN_TYPES.SUI : TOKEN_TYPES.USDC,
           ],
           arguments: [
             txb.object(TOKENS[1].poolId!),
@@ -267,8 +311,8 @@ export function OrderBookInterface() {
         txb.moveCall({
           target: `${DEEPBOOK.PACKAGE_ID}::clob::place_market_order`,
           typeArguments: [
-            orderSide === "buy" ? TOKEN_TYPES.USDC : TOKEN_TYPES.SUI,
-            orderSide === "buy" ? TOKEN_TYPES.SUI : TOKEN_TYPES.USDC,
+            order.side === "buy" ? TOKEN_TYPES.USDC : TOKEN_TYPES.SUI,
+            order.side === "buy" ? TOKEN_TYPES.SUI : TOKEN_TYPES.USDC,
           ],
           arguments: [
             txb.object(TOKENS[1].poolId!),
@@ -290,12 +334,9 @@ export function OrderBookInterface() {
       setNotification(
         createNotification("Order placed successfully", "success")
       );
-      setAmount("");
-      if (orderType === "limit") {
-        setPrice("");
-      }
 
       await fetchOrderBookData(castToCompatibleSuiClient(suiClient));
+      await fetchBalances();
     } catch (error) {
       console.error("Order placement failed:", error);
       setNotification(
@@ -323,82 +364,20 @@ export function OrderBookInterface() {
         </div>
 
         <div className="trading-form dex-card">
-          <div className="order-type-group">
-            <button
-              className={`order-button ${
-                orderType === "limit" ? "active" : ""
-              }`}
-              onClick={() => setOrderType("limit")}
-            >
-              Limit
-            </button>
-            <button
-              className={`order-button ${
-                orderType === "market" ? "active" : ""
-              }`}
-              onClick={() => setOrderType("market")}
-            >
-              Market
-            </button>
-          </div>
-
-          <div className="trade-type-group">
-            <button
-              className={`trade-button buy ${
-                orderSide === "buy" ? "active" : ""
-              }`}
-              onClick={() => setOrderSide("buy")}
-            >
-              Buy
-            </button>
-            <button
-              className={`trade-button sell ${
-                orderSide === "sell" ? "active" : ""
-              }`}
-              onClick={() => setOrderSide("sell")}
-            >
-              Sell
-            </button>
-          </div>
-
-          {orderType === "limit" && (
-            <div className="form-group">
-              <label className="form-label">Price (USDC)</label>
-              <input
-                type="number"
-                className="form-input"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                min="0"
-                step="0.000001"
-                placeholder="Enter price"
-              />
+          <OrderForm
+            onSubmit={handlePlaceOrder}
+            currentPrice={Number(asks[0]?.price || 0)}
+            isLoading={isLoading}
+            maxAmount={orderSide === "buy" ? usdcBalance : suiBalance}
+            isWalletConnected={!!currentAccount}
+          />
+          {!currentAccount && (
+            <div className="connect-wallet-overlay">
+              <ConnectButton className="connect-button" />
+              <p className="text-gray-400 mt-2 text-center">
+                Connect your wallet to start trading
+              </p>
             </div>
-          )}
-
-          <div className="form-group">
-            <label className="form-label">Amount (SUI)</label>
-            <input
-              type="number"
-              className="form-input"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              min="0"
-              step="0.000001"
-              placeholder="Enter amount"
-            />
-          </div>
-
-          {!currentAccount ? (
-            <ConnectButton className="connect-button" />
-          ) : (
-            <button
-              className={`trade-button ${orderSide} active`}
-              onClick={handlePlaceOrder}
-              disabled={isLoading}
-            >
-              {isLoading ? "Processing..." : `Place ${orderSide} order`}
-            </button>
           )}
         </div>
 
@@ -406,7 +385,7 @@ export function OrderBookInterface() {
           <OrderBook
             bids={bids}
             asks={asks}
-            onSelect={(price) => setPrice(price.toString())}
+            onSelect={() => {}} // Removed unused price setter
           />
         </div>
 
