@@ -1,3 +1,9 @@
+/**
+ * @file src/orderbookinterface.css
+ * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-25 19:47:24
+ * Current User's Login: jake1318
+ */
+
 /* Updated src/styles/Dex.css */
 
 .dex-container {
@@ -37,12 +43,30 @@
 
 /* Chart Section */
 .chart-container {
-  grid-column: span 8;
+  grid-column: span 7;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid #00a3ff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 230, 255, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-container:hover {
+  box-shadow: 0 0 30px rgba(0, 230, 255, 0.8);
+  border-color: #00ffff;
 }
 
 /* Trading Form */
 .trading-form {
-  grid-column: span 4;
+  grid-column: span 5;
+  height: 100%;
 }
 
 /* Order Type Buttons */
@@ -269,17 +293,17 @@
 
 @media (max-width: 1280px) {
   .dex-grid {
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 
   .chart-container,
   .trading-form {
-    grid-column: span 8;
+    grid-column: span 12;
   }
 
   .orderbook-container,
   .trades-container {
-    grid-column: span 4;
+    grid-column: span 6;
   }
 }
 

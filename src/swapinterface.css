@@ -1,186 +1,111 @@
-/* Global styles */
-body {
-  margin: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(
-    135deg,
-    #000,
-    #1e1e1e
-  ); /* Single consistent gradient */
-  font-family: "Orbitron", sans-serif;
-  color: #fff;
-}
+/**
+ * @file src/tradingchart.css
+ * Updated for consistent height alignment and responsiveness
+ */
 
-/* Container for the entire swap interface */
-.swap-container {
-  flex: 1; /* Ensures it grows to fill available space */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-/* Card style for the swap UI */
-.swap-card {
-  width: 100%;
-  max-width: 480px;
+/* Chart Container */
+.chart-wrapper {
   background: rgba(30, 30, 30, 0.95);
   border: 1px solid #00a3ff;
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
+  margin: 1rem 0;
   box-shadow: 0 0 30px rgba(0, 230, 255, 0.3);
   backdrop-filter: blur(10px);
   animation: fadeIn 0.5s ease-in-out;
+  width: 100%;
+  height: auto; /* Adjust height dynamically */
+  min-height: 460px; /* Ensures consistent height with other sections */
 }
 
-/* Title for the swap card */
-.swap-title {
-  font-size: 2rem;
-  color: #00a3ff;
-  text-align: center;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 12px rgba(0, 163, 255, 0.5);
-}
-
-/* Token input container styles */
-.token-input-container {
+/* Chart Controls Container */
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
   background: rgba(20, 20, 20, 0.8);
   border: 1px solid rgba(0, 163, 255, 0.2);
   border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
   box-shadow: 0 0 20px rgba(0, 230, 255, 0.2);
   transition: all 0.3s ease;
 }
 
-.token-input-container:hover {
+.chart-controls:hover {
   border-color: #00ffff;
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
 }
 
-/* Header for token input containers */
-.token-input-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.token-label,
-.token-balance {
-  color: #87cefa;
-  font-size: 0.9rem;
-  text-shadow: 0 0 8px rgba(135, 206, 250, 0.5);
-}
-
-/* Input field for token values */
-.token-input {
-  flex: 1;
+/* Button Styles */
+.timeframe-button,
+.indicator-button {
   background: transparent;
-  border: none;
-  color: #e0e0e0;
-  font-size: 1.5rem;
-  outline: none;
-  padding: 0.5rem 0;
-}
-
-.token-input::placeholder {
-  color: rgba(224, 224, 224, 0.4);
-}
-
-/* Button to select a token */
-.select-token-button {
-  background: rgba(0, 163, 255, 0.1);
   border: 1px solid #00a3ff;
   color: #00a3ff;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-shadow: 0 0 8px rgba(0, 163, 255, 0.5);
-  box-shadow: 0 0 15px rgba(0, 163, 255, 0.2);
+  font-family: "Orbitron", sans-serif;
+  min-width: 60px;
+  text-align: center;
 }
 
-.select-token-button:hover {
-  background: rgba(0, 255, 255, 0.1);
-  border-color: #00ffff;
-  color: #00ffff;
+.timeframe-button:hover,
+.indicator-button:hover {
+  background: rgba(0, 163, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 163, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.timeframe-button.active,
+.indicator-button.active {
+  background: linear-gradient(135deg, #00a3ff, #00ffff);
+  color: #1a1a1a;
+  border: none;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
 }
 
-/* Swap button styles */
-.swap-button {
+/* Chart Area */
+div[ref="chartContainerRef"] {
   width: 100%;
-  background: linear-gradient(135deg, #00a3ff, #00ffff);
-  color: #000;
-  padding: 1rem;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 1.5rem 0;
-  box-shadow: 0 0 20px rgba(0, 230, 255, 0.4);
+  height: calc(100% - 70px); /* Subtract height of controls */
+  min-height: 400px;
 }
 
-.swap-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-}
-
-.swap-button:disabled {
-  background: linear-gradient(135deg, #4a5568, #2d3748);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Footer styles */
-.footer {
-  width: 100%;
-  text-align: center;
-  padding: 1rem;
-  background: #1e1e1e; /* Matches the theme */
-  color: #fff;
-  font-size: 0.9rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-}
-/* Arrow container */
-.swap-arrow {
-  width: 40px;
-  height: 40px;
-  margin: 1rem auto; /* Centers the arrow */
-  background: rgba(30, 30, 30, 0.95);
-  border: 1px solid #00a3ff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0, 230, 255, 0.3);
-}
-
-.swap-arrow:hover {
-  transform: rotate(180deg);
-  border-color: #00ffff;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    padding: 1rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .chart-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .timeframe-button,
+  .indicator-button {
+    padding: 0.4rem 0.8rem;
+    min-width: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-wrapper {
+    min-height: 400px;
+    margin: 0.5rem 0;
+  }
+
+  .chart-controls {
+    padding: 0.75rem;
+  }
+
+  div[ref="chartContainerRef"] {
+    min-height: 300px;
   }
 }

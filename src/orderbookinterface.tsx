@@ -359,7 +359,7 @@ export function OrderBookInterface() {
           </div>
         )}
 
-        <div className="chart-container dex-card">
+        <div className="chart-container">
           <TradingChart candlesticks={candlesticks} width={800} height={400} />
         </div>
 
