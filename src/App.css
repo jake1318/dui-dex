@@ -11,3 +11,21 @@ select,
 textarea {
   font-family: "Orbitron", sans-serif !important;
 }
+/**
+ * @file src/App.css
+ * Last updated: 2025-01-24 23:00:49
+ * Author: jake1318
+ */
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  margin-top: 80px; /* Height of navbar */
+}

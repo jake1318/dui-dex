@@ -1,22 +1,38 @@
-/**
- * @file src/components/PageLayout.css
- * Last updated: 2025-01-24 07:50:56
- * Author: jake1318
- */
-
 .page-layout {
-  min-height: calc(100vh - 80px); /* Adjust based on your navbar height */
-  padding: 2rem;
-  margin: 0 auto;
+  min-height: calc(100vh - 60px); /* Adjust height based on navbar height */
   width: 100%;
+  padding: 0; /* Avoid unnecessary padding */
+  margin: 0; /* Remove extra spacing */
+  margin-top: 60px; /* Match navbar height */
 }
 
 .half-width {
-  max-width: 800px;
+  max-width: 1200px; /* Centered, constrained layout */
   margin: 0 auto;
+  padding: 2rem;
 }
 
 .full-width {
-  max-width: 100%;
-  padding: 0;
+  width: 100%;
+  max-width: 100%; /* Ensures full screen width */
+  margin: 0;
+  padding: 0; /* Remove padding for full-width content */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1280px) {
+  .half-width {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-layout {
+    padding: 1rem; /* Reduced padding on smaller screens */
+  }
+
+  .half-width {
+    max-width: 95%;
+    padding: 1rem;
+  }
 }

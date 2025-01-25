@@ -25,5 +25,5 @@
     },
     "baseUrl": "."
   },
-  "include": ["src/**/*", "src/types/**/*"]
+  "include": ["src/**/*", "src/types/**/*", "backend"]
 }

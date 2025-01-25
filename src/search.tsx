@@ -1,87 +1,56 @@
 /**
- * @file src/pages/Search.tsx
- * Last updated: 2025-01-24
+ * @file src/search.tsx
+ * Last updated: 2025-01-24 23:33:50
  * Author: jake1318
  */
 
-import { useState } from "react";
-import "./search.css";
-
-const Footer: React.FC = () => (
-  <footer className="footer">
-    <p>&copy; 2025 Sui Mind. All rights reserved.</p>
-  </footer>
-);
+import React, { useState } from "react";
+import "./Search.css";
 
 export function Search() {
-  const [query, setQuery] = useState<string>("");
-  const [result, setResult] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSearch = async () => {
-    setError(null);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: query }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setResult(data.result);
-      } else {
-        setError(data.error || "An error occurred while fetching results.");
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      setError("Unable to fetch results. Please try again.");
-    } finally {
-      setIsLoading(false);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) {
+      setError("Please enter a search term");
+      return;
     }
+    setError("");
+    // Implement search functionality
+    console.log("Searching for:", searchQuery);
   };
 
   return (
-    <>
-      <div className="mind-search">
-        <div className="container">
-          <h1 className="title">Mind Search</h1>
-          <p className="description">
-            Experience the power of AI-enhanced search tailored to your needs.
-          </p>
+    <div className="mind-search">
+      <div className="container">
+        <h1 className="title">Mind Search</h1>
+        <p className="description">
+          Experience the power of AI-enhanced search tailored to your needs.
+        </p>
+
+        <form onSubmit={handleSearch}>
           <div className="search-box">
             <input
               type="text"
-              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Ask anything..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              disabled={isLoading}
+              className="search-input"
             />
-            <button
-              className="search-button"
-              onClick={handleSearch}
-              disabled={isLoading}
-            >
-              {isLoading ? "Searching..." : "Search"}
+            <button type="submit" className="search-button">
+              Search
             </button>
           </div>
-          {error && <p className="error-message">{error}</p>}
-          {result && (
-            <div className="search-result">
-              <h2>Search Result:</h2>
-              <p>{result}</p>
-            </div>
-          )}
+          {error && <div className="error-message">{error}</div>}
+        </form>
+
+        <div className="search-result">
+          <h2>Search Results</h2>
+          <p></p>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }

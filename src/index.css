@@ -1,12 +1,117 @@
+/**
+ * @file src/index.css
+ * Last updated: 2025-01-24 23:07:18
+ * Author: jake1318
+ */
+
+:root {
+  /* Colors */
+  --primary-color: #00a3ff;
+  --background-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --text-color-secondary: #888;
+
+  /* Typography */
+  --font-primary: "Orbitron", sans-serif;
+  --font-secondary: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Ensure the body takes the full height of the viewport */
-html,
 body {
-  height: 100%;
   margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-secondary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Classes */
+.font-orbitron {
+  font-family: var(--font-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-primary);
+}
+
+/* Brand elements and important headings */
+.brand-text,
+.logo-text,
+.nav-brand,
+.section-title {
+  font-family: var(--font-primary);
+}
+
+/* App Container */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  margin-top: 80px; /* Height of navbar */
+}
+
+/* Button styles with Orbitron */
+.primary-button {
+  font-family: var(--font-primary);
+  font-weight: 500;
+}
+
+/* Input styles */
+input,
+button,
+textarea,
+select {
+  font-family: var(--font-secondary);
+}
+
+/* Navigation items */
+.nav-link {
+  font-family: var(--font-primary);
+  font-weight: 500;
+}
+
+/* Utility classes for font weights */
+.font-light {
+  font-weight: 300;
+}
+.font-regular {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-black {
+  font-weight: 900;
 }

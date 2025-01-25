@@ -1,6 +1,6 @@
 /**
  * @file src/components/PageLayout.tsx
- * Last updated: 2025-01-24 07:50:56
+ * Last updated: 2025-01-24 22:56:31
  * Author: jake1318
  */
 
@@ -13,9 +13,9 @@ interface PageLayoutProps {
 }
 
 export function PageLayout({ children, fullWidth = false }: PageLayoutProps) {
-  return (
-    <div className={`page-layout ${fullWidth ? "full-width" : "half-width"}`}>
-      {children}
-    </div>
-  );
+  const pageClass = fullWidth
+    ? "page-layout full-width"
+    : "page-layout half-width";
+
+  return <div className={pageClass}>{children}</div>;
 }

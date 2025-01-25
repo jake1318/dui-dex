@@ -1,12 +1,13 @@
 /**
  * @file src/App.tsx
- * Last updated: 2025-01-24 22:46:54
+ * Last updated: 2025-01-24 23:00:49
  * Author: jake1318
  */
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar } from "./navbar";
-import { Home } from "./home"; // Import the Home component
+import { Footer } from "./footer"; // Ensure the path matches your file structure
+import { Home } from "./home"; // Ensure the Home component is correctly implemented
 import { SwapInterface } from "./SwapInterface";
 import { OrderBookInterface } from "./orderbookinterface";
 import { Search } from "./search";
@@ -37,50 +38,64 @@ function App() {
       <SuiClientProvider networks={networkConfig}>
         <WalletProvider preferredWallets={["Sui Wallet"]}>
           <Router>
-            <div className="min-h-screen bg-gray-900">
+            <div className="app-container">
+              {/* Navbar appears on all pages */}
               <Navbar />
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <PageLayout>
-                      <Home />
-                    </PageLayout>
-                  }
-                />
-                <Route
-                  path="/mind-swap"
-                  element={
-                    <PageLayout>
-                      <SwapInterface />
-                    </PageLayout>
-                  }
-                />
-                <Route
-                  path="/orderbook"
-                  element={
-                    <PageLayout fullWidth>
-                      <OrderBookInterface />
-                    </PageLayout>
-                  }
-                />
-                <Route
-                  path="/mind-search"
-                  element={
-                    <PageLayout>
-                      <Search />
-                    </PageLayout>
-                  }
-                />
-                <Route
-                  path="/mind-exchange"
-                  element={
-                    <PageLayout>
-                      <MindExchangePage />
-                    </PageLayout>
-                  }
-                />
-              </Routes>
+              <main className="main-content">
+                <Routes>
+                  {/* Use fullWidth for hero-style pages */}
+                  <Route
+                    path="/"
+                    element={
+                      <PageLayout fullWidth>
+                        <Home />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/home"
+                    element={
+                      <PageLayout fullWidth>
+                        <Home />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/mind-swap"
+                    element={
+                      <PageLayout>
+                        <SwapInterface />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/orderbook"
+                    element={
+                      <PageLayout fullWidth>
+                        <OrderBookInterface />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/mind-search"
+                    element={
+                      <PageLayout>
+                        <Search />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/mind-exchange"
+                    element={
+                      <PageLayout>
+                        <MindExchangePage />
+                      </PageLayout>
+                    }
+                  />
+                </Routes>
+              </main>
+              {/* Footer appears on all pages */}
+              <Footer />
             </div>
           </Router>
         </WalletProvider>

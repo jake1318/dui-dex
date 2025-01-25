@@ -1,6 +1,6 @@
 /**
- * @file src/components/Navbar.tsx
- * Last updated: 2025-01-24 22:44:34
+ * @file src/navbar.tsx
+ * Last updated: 2025-01-24 23:11:24
  * Author: jake1318
  */
 
@@ -12,7 +12,7 @@ export function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        {/* Logo is the home link */}
+        {/* Entire logo (image + text) wrapped in a single Link to avoid nesting issues */}
         <Link to="/home" className="logo-container">
           <img src="/Design_2.png" alt="Sui Mind Logo" className="logo-image" />
           <span className="logo-text">Sui Mind</span>
