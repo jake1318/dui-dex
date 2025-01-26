@@ -123,3 +123,62 @@ export interface OrderDetails extends OrderBookEntry {
   createdAt: number;
   updatedAt: number;
 }
+// Add to src/types.ts
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+export interface SearchApiResponse
+  extends ApiResponse<{
+    aiResponse: string;
+    youtubeResults: YouTubeResult[];
+    webResults: WebResult[];
+  }> {}
+
+export interface YouTubeResult {
+  title: string;
+  description: string;
+  thumbnail: string;
+  videoId: string;
+  url: string;
+}
+
+export interface WebResult {
+  title: string;
+  description: string;
+  url: string;
+}
+// src/types.ts
+
+// ... (keep your existing types)
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+export interface SearchResponse {
+  aiResponse: string;
+  youtubeResults: YouTubeResult[];
+  webResults: WebResult[];
+}
+
+export interface SearchApiResponse extends ApiResponse<SearchResponse> {}
+
+export interface YouTubeResult {
+  title: string;
+  description: string;
+  thumbnail: string;
+  videoId: string;
+  url: string;
+}
+
+export interface WebResult {
+  title: string;
+  description: string;
+  url: string;
+}

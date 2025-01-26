@@ -1,38 +1,33 @@
 /**
  * @file src/search.tsx
- * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-25 20:38:45
+ * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-26 00:33:33
  * Current User's Login: jake1318
  */
 
 import React, { useState } from "react";
 import "./Search.css";
 
-interface YouTubeResult {
-  title: string;
-  description: string;
-  thumbnail: string;
-  videoId: string;
-  url: string;
-}
-
-interface WebResult {
-  title: string;
-  description: string;
-  url: string;
-}
-
-interface SearchResponse {
+interface SearchResults {
   aiResponse: string;
-  youtubeResults: YouTubeResult[];
-  webResults: WebResult[];
-  error?: string;
+  youtubeResults: {
+    title: string;
+    description: string;
+    thumbnail: string;
+    videoId: string;
+    url: string;
+  }[];
+  webResults: {
+    title: string;
+    description: string;
+    url: string;
+  }[];
 }
 
 export function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [searchResult, setSearchResult] = useState<SearchResponse | null>(null);
+  const [results, setResults] = useState<SearchResults | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,36 +35,31 @@ export function Search() {
       setError("Please enter a search term");
       return;
     }
-    
+
     setError("");
     setLoading(true);
-    
+
     try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
+      const response = await fetch("/api/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
-          prompt: searchQuery
-        }),
+        body: JSON.stringify({ prompt: searchQuery }),
       });
-      
-      const data: SearchResponse = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
+
+      if (!response.ok) {
+        throw new Error("Search request failed");
       }
 
-      setSearchResult(data);
-      setError("");
+      const data = await response.json();
+      setResults(data);
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : "Failed to process your search. Please try again.";
-      
-      setError(errorMessage);
-      console.error('Search error:', error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during search"
+      );
     } finally {
       setLoading(false);
     }
@@ -78,9 +68,9 @@ export function Search() {
   return (
     <div className="mind-search">
       <div className="container">
-        <h1 className="title">AI-Powered Search</h1>
+        <h1 className="title">Mind Search</h1>
         <p className="description">
-          Get comprehensive results powered by AI, including relevant videos and web resources
+          Experience the power of AI-enhanced search tailored to your needs.
         </p>
 
         <form onSubmit={handleSearch}>
@@ -93,12 +83,8 @@ export function Search() {
               className="search-input"
               disabled={loading}
             />
-            <button 
-              type="submit" 
-              className="search-button"
-              disabled={loading}
-            >
-              {loading ? 'Searching...' : 'Search'}
+            <button type="submit" className="search-button" disabled={loading}>
+              {loading ? "Searching..." : "Search"}
             </button>
           </div>
           {error && <div className="error-message">{error}</div>}
@@ -111,43 +97,46 @@ export function Search() {
           </div>
         )}
 
-        {searchResult && (
-          <div className="results-grid">
+        {results && (
+          <div className="results-container">
             {/* AI Response */}
-            <div className="result-container ai-response">
+            <div className="result-section ai-response">
               <h2>AI Response</h2>
-              <div className="result-content">
-                {searchResult.aiResponse}
-              </div>
+              <div className="content">{results.aiResponse}</div>
             </div>
 
             {/* YouTube Results */}
-            {searchResult.youtubeResults.length > 0 && (
-              <div className="result-container youtube-results">
+            {results.youtubeResults.length > 0 && (
+              <div className="result-section youtube-results">
                 <h2>Related Videos</h2>
-                <div className="videos-grid">
-                  {searchResult.youtubeResults.map((video, index) => (
-                    <div key={video.videoId} className="video-card">
-                      <a href={video.url} target="_blank" rel="noopener noreferrer">
-                        <img src={video.thumbnail} alt={video.title} />
-                        <h3>{video.title}</h3>
-                      </a>
-                    </div>
+                <div className="video-grid">
+                  {results.youtubeResults.map((video) => (
+                    <a
+                      key={video.videoId}
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="video-card"
+                    >
+                      <img src={video.thumbnail} alt={video.title} />
+                      <h3>{video.title}</h3>
+                      <p>{video.description}</p>
+                    </a>
                   ))}
                 </div>
               </div>
             )}
 
             {/* Web Results */}
-            {searchResult.webResults.length > 0 && (
-              <div className="result-container web-results">
+            {results.webResults.length > 0 && (
+              <div className="result-section web-results">
                 <h2>Related Resources</h2>
                 <div className="web-links">
-                  {searchResult.webResults.map((result, index) => (
-                    <a 
-                      key={index} 
-                      href={result.url} 
-                      target="_blank" 
+                  {results.webResults.map((result, index) => (
+                    <a
+                      key={index}
+                      href={result.url}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="web-link-card"
                     >
