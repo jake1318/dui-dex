@@ -1,6 +1,6 @@
 /**
  * @file src/TradingChart.tsx
- * Current Date and Time (UTC): 2025-01-25 00:59:58
+ * Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2025-01-25 20:10:18
  * Author: jake1318
  */
 
@@ -87,7 +87,7 @@ export function TradingChart({
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    // Create chart instance
+    // Create chart instance with updated options
     chartRef.current = createChart(chartContainerRef.current, {
       width,
       height,
@@ -115,14 +115,14 @@ export function TradingChart({
         },
       },
       rightPriceScale: {
-        borderColor: "#2B2B43",
+        borderColor: "transparent", // Remove right scale border
         scaleMargins: {
           top: 0.1,
           bottom: 0.2,
         },
       },
       timeScale: {
-        borderColor: "#2B2B43",
+        borderColor: "transparent", // Remove bottom scale border
         timeVisible: true,
         secondsVisible: false,
         barSpacing: 12,
@@ -154,6 +154,7 @@ export function TradingChart({
         bottom: 0,
       },
       visible: true,
+      borderColor: "transparent", // Remove volume scale border
     });
 
     // Format and set data
