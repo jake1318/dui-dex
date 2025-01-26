@@ -6,7 +6,7 @@
 
 import { Link } from "react-router-dom";
 import { CustomWalletButton } from "./customwalletbutton";
-import "./Navbar.css";
+import "./navbar.css";
 
 export function Navbar() {
   return (
