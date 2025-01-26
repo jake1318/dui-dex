@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from "react";
-import "./Search.css";
+import "./search.css";
 
 interface SearchResults {
   aiResponse: string;
