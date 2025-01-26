@@ -5,7 +5,7 @@
  */
 
 import { Link } from "react-router-dom";
-import "./Home.css";
+import "./home.css";
 
 export function Home() {
   return (
