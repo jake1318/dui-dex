@@ -5,7 +5,7 @@
  */
 
 import { ReactNode } from "react";
-import "./PageLayout.css";
+import "./pagelayout.css";
 
 interface PageLayoutProps {
   children: ReactNode;
