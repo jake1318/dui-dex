@@ -15,8 +15,8 @@ const morgan = require("morgan");
 require("dotenv").config(); // Load environment variables
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   // Log but don't exit
 });
 
@@ -25,7 +25,9 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(morgan(":method :url :status :response-time ms - :res[content-length]"));
+app.use(
+  morgan(":method :url :status :response-time ms - :res[content-length]")
+);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -35,17 +37,17 @@ const limiter = rateLimit({
 app.use("/api/", limiter);
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
-    status: 'ok',
+    status: "ok",
     environment: process.env.NODE_ENV,
     openai: !!process.env.OPENAI_API_KEY,
-    youtube: !!process.env.YOUTUBE_API_KEY
+    youtube: !!process.env.YOUTUBE_API_KEY,
   });
 });
 
 // Serve static files from the dist folder
-app.use(express.static(path.join(__dirname, "../dist")));
+app.use(express.static(path.join(__dirname, "dist")));
 
 // Initialize OpenAI API client
 let openai;
@@ -54,7 +56,7 @@ try {
     console.warn("Warning: OPENAI_API_KEY is not set.");
   }
   openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || 'dummy-key',
+    apiKey: process.env.OPENAI_API_KEY || "dummy-key",
   });
   console.log("OpenAI client initialized.");
 } catch (error) {
@@ -121,8 +123,9 @@ async function getWebResults(query) {
 // API route to handle OpenAI requests with enhanced results
 app.post("/api/generate", async (req, res) => {
   if (!openai || !process.env.OPENAI_API_KEY) {
-    return res.status(503).json({ 
-      error: "OpenAI service is not available. Please check your configuration." 
+    return res.status(503).json({
+      error:
+        "OpenAI service is not available. Please check your configuration.",
     });
   }
 
@@ -145,7 +148,9 @@ app.post("/api/generate", async (req, res) => {
 
     const aiResult = aiResponse.choices[0]?.message?.content?.trim();
     if (!aiResult) {
-      return res.status(500).json({ error: "Invalid response from OpenAI API." });
+      return res
+        .status(500)
+        .json({ error: "Invalid response from OpenAI API." });
     }
 
     res.json({
@@ -156,14 +161,16 @@ app.post("/api/generate", async (req, res) => {
   } catch (error) {
     console.error("Error processing request:", error);
     res.status(500).json({
-      error: error.response?.data?.error?.message || "Failed to process request. Please try again later.",
+      error:
+        error.response?.data?.error?.message ||
+        "Failed to process request. Please try again later.",
     });
   }
 });
 
 // Serve index.html for all other routes (SPA support)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
+  res.sendFile(path.join(__dirname, "dist/index.html"));
 });
 
 // Start the server
@@ -171,15 +178,21 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
-  console.log(`OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Set' : 'Not set'}`);
-  console.log(`YouTube integration: ${process.env.YOUTUBE_API_KEY ? "Enabled" : "Disabled"}`);
+  console.log(
+    `OpenAI API Key: ${process.env.OPENAI_API_KEY ? "Set" : "Not set"}`
+  );
+  console.log(
+    `YouTube integration: ${
+      process.env.YOUTUBE_API_KEY ? "Enabled" : "Disabled"
+    }`
+  );
 });
 
 // Handle server shutdown gracefully
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received. Shutting down gracefully...');
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received. Shutting down gracefully...");
   server.close(() => {
-    console.log('Server closed');
+    console.log("Server closed");
     process.exit(0);
   });
 });
