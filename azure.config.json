@@ -1,0 +1,41 @@
+{
+  "platform": {
+    "apiRuntime": "node|20"
+  },
+  "routes": [
+    {
+      "route": "/api/*",
+      "serve": "/backend/server.js",
+      "methods": ["GET", "POST"]
+    },
+    {
+      "route": "/assets/*",
+      "serve": "/dist/assets/*",
+      "statusCode": 200
+    },
+    {
+      "route": "/*",
+      "serve": "/dist/index.html",
+      "statusCode": 200
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/api/*", "/assets/*"]
+  },
+  "mimeTypes": {
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".html": "text/html",
+    ".ico": "image/x-icon"
+  },
+  "staticWebApps": {
+    "trailingSlash": "never",
+    "responseOverrides": {
+      "404": {
+        "rewrite": "/index.html",
+        "statusCode": 200
+      }
+    }
+  }
+}
