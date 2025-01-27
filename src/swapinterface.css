@@ -109,3 +109,28 @@ div[ref="chartContainerRef"] {
     min-height: 300px;
   }
 }
+.impact-low {
+  color: #4caf50;
+}
+
+.impact-medium {
+  color: #ffc107;
+}
+
+.impact-high {
+  color: #f44336;
+}
+
+.swap-details {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
